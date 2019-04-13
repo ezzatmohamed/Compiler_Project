@@ -13,6 +13,7 @@
 :						return COLON;
 ,                       return COMMA;
 
+
 int						return TYPE_INT;
 float					return TYPE_FLOAT;
 char				   	return TYPE_CHAR;
@@ -76,6 +77,7 @@ return                	return RET;
 [\n]					{yylineno=yylineno+1;}
 \(false\|true\)            { return BOOLEAN_VALUE;}
 
+.                           yyerror("Unknown character");
 
 %% 
  int yywrap(void)

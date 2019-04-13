@@ -29,7 +29,7 @@
 
 program:
         program statement '\n'
-        | /* NULL */
+        | statement
         ;
 
 statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleration \n");}
@@ -82,34 +82,10 @@ type:	  TYPE_INT 							{$$=$1;}
 			| TYPE_STRING 							{$$=$1;}
 			;
 
-/*
-ArithmeticOp:  	  PLUS 								{$$=\+;}
-								| MINUS 							{$$=-;}
-								| MULTIPLY 						{$$=*;}
-								| DIVIDE 							{$$=/;}
-								| POWER  							{$$=*;}
-								| MODULUS		 					{$$=%;}
-								| AND 	 							{$$=&&;}
-				 				| OR 	 						   	{$$=||;}
-								;
-
-BoolOp:    RELATION_AND  												{$$=$1;}
-				 | RELATION_OR  												{$$=$1;}
-				 | RELATION_EQUALS 											{$$=$1;}
-				 | RELATION_NOTEQUAL 										{$$=$1;}			
-				 | RELATION_LESS_THAN  									{$$=$1;}
-				 | RELATION_GREATER_THAN	 							{$$=$1;}
-				 | RELATION_LESS_EQUAL 									{$$=$1;}
-				 | RELATION_GREATER_EQUAL	 							{$$=$1;}
-				 ;
-	*/			 
-
-
 exp:    exp PLUS exp		{$$ = $1 + $3;}
 		 |  exp MINUS exp		{$$ = $1 - $3;}
 		 |  exp MULTIPLY exp		{$$ = $1 * $3;}
 		 |  exp DIVIDE exp		{$$ = $1 / $3;}
-//		 |  exp POWER exp		{$$ = pow($1,$3);}
 		 |  exp MODULUS exp		{$$ = $1 % $3;}
 		 |  exp AND exp		{$$ = $1 & $3;}
 		 |  exp OR exp		{$$ = $1 | $3;}
