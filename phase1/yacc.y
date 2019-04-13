@@ -21,14 +21,9 @@
 %nonassoc UMINUS
 
 %{  
-	#include <stdio.h>   
-	#include <math.h>
-	int yyerror(char *);
-	int yylex(void);
-	int yylineno;
-	FILE * f1;
-	FILE * yyin;
-
+    #include <stdio.h>
+    int yylex(void);
+    void yyerror(char *);
 %}
 %%
 
@@ -170,17 +165,7 @@ scope:	SCOPE_OBRACE SCOPE_CBRACE
 
 %%
 
-/*
-int ArithOper(int op,int x,int y){
-	return 5;
-}
-
-bool Booloper(int op,_Bool x,_Bool y)
-{
-	return false;
-}
-*/
- int yyerror(char *s) {
+void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);
 }
 
