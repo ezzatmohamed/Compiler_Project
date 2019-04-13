@@ -22,6 +22,7 @@
 
 %{  
 	#include <stdio.h>   
+	#include <math.h>
 	int yyerror(char *);
 	int yylex(void);
 	int yylineno;
@@ -48,8 +49,8 @@ statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleratio
 		
 		| DO scope WHILE ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON					{printf("Do while\n");}
 
-		| FOR ARGUMENT_OBRACKET INT IDENTIFIER ASSIGN exp SEMICOLON 
-		  IDENTIFIER BoolOp exp SEMICOLON
+		| FOR ARGUMENT_OBRACKET TYPE_INT IDENTIFIER ASSIGN exp SEMICOLON 
+		  exp SEMICOLON
 		  IDENTIFIER ASSIGN exp ARGUMENT_CBRACKET
 		  scope																																		  {printf("For loop\n");}
 
@@ -77,30 +78,24 @@ SwitchBody: SCOPE_OBRACE CaseStatment SCOPE_CBRACE
 
 CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET scope CaseStatment
 							| DEFAULT scope
+							;	
 
 type:	  TYPE_INT 							{$$=$1;}
 			| TYPE_FLOAT  							{$$=$1;}
 			| TYPE_CHAR  							{$$=$1;}
 			| TYPE_BOOL  							{$$=$1;}
 			| TYPE_STRING 							{$$=$1;}
+			;
 
-
-
-exp:   exp ArithmeticOp exp		{$$ = ArithOper(ArithmeticOp,$1,$3); }				
-		 | exp BoolOp exp					{$$ = Booloper(BoolOp,$1,$3);}
-		 | NOT exp								{$$ = !$2}
-		 | (exp) 									{$$=$2;}
-		 | value									{$$=$1;}
-
-
-ArithmeticOp:  	  PLUS 								{$$=$1;}
-								| MINUS 							{$$=$1;}
-								| MULTIPLY 						{$$=$1;}
-								| DIVIDE 							{$$=$1;}
-								| POWER  							{$$=$1;}
-								| MODULUS		 					{$$=$1;}
-								| AND 	 							{$$=$1;}
-				 				| OR 	 						   	{$$=$1;}
+/*
+ArithmeticOp:  	  PLUS 								{$$=\+;}
+								| MINUS 							{$$=-;}
+								| MULTIPLY 						{$$=*;}
+								| DIVIDE 							{$$=/;}
+								| POWER  							{$$=*;}
+								| MODULUS		 					{$$=%;}
+								| AND 	 							{$$=&&;}
+				 				| OR 	 						   	{$$=||;}
 								;
 
 BoolOp:    RELATION_AND  												{$$=$1;}
@@ -112,7 +107,32 @@ BoolOp:    RELATION_AND  												{$$=$1;}
 				 | RELATION_LESS_EQUAL 									{$$=$1;}
 				 | RELATION_GREATER_EQUAL	 							{$$=$1;}
 				 ;
-				 
+	*/			 
+
+
+exp:    exp PLUS exp		{$$ = $1 + $3;}
+		 |  exp MINUS exp		{$$ = $1 - $3;}
+		 |  exp MULTIPLY exp		{$$ = $1 * $3;}
+		 |  exp DIVIDE exp		{$$ = $1 / $3;}
+		// |  exp POWER exp		{$$ = ;}
+		 |  exp MODULUS exp		{$$ = $1 % $3;}
+		 |  exp AND exp		{$$ = $1 & $3;}
+		 |  exp OR exp		{$$ = $1 | $3;}
+		 |  NOT exp								{$$ = !$2;}
+
+		 |  exp RELATION_AND exp		{$$ = $1 && $3;}
+		 |  exp RELATION_OR exp		{$$ = $1 || $3;}
+		 |  exp RELATION_EQUALS exp		{$$ = $1 == $3;}
+		 |  exp RELATION_NOTEQUAL exp		{$$ = $1 != $3;}
+		 |  exp RELATION_LESS_THAN exp		{$$ = $1 < $3;}
+		 |  exp RELATION_GREATER_THAN exp		{$$ = $1 > $3;}
+		 |  exp RELATION_LESS_EQUAL exp		{$$ = $1 <= $3;}
+		 |  exp RELATION_GREATER_EQUAL exp		{$$ = $1 >= $3;}
+
+		 | '('exp')' 									{$$=$2;}
+		 | value									{$$=$1;}
+			;
+
 
 value:      INTEGER_VALUE   									{$$=$1;}
 					| FLOATINPOINT_VALUE   							{$$=$1;}
@@ -120,10 +140,10 @@ value:      INTEGER_VALUE   									{$$=$1;}
 					| CHARACTER  												{$$=$1;}
 					| BOOLEAN_VALUE     								{$$=$1;}
 					| IDENTIFIER					  						{$$=$1;}
+					;
 
 
-
-FuncRet: RET  exp | RET													
+FuncRet: RET  exp | RET		;											
 
 
 function: IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SCOPE_OBRACE statements FuncRet  SEMICOLON   SCOPE_CBRACE   {printf("function\n");}
@@ -150,8 +170,21 @@ scope:	SCOPE_OBRACE SCOPE_CBRACE
 
 %%
 
+/*
 int ArithOper(int op,int x,int y){
+	return 5;
 }
 
-bool Booloper(int op,bool x,bool y)
-{}
+bool Booloper(int op,_Bool x,_Bool y)
+{
+	return false;
+}
+*/
+ int yyerror(char *s) {
+    fprintf(stderr, "%s\n", s);
+}
+
+int main(void) {
+    yyparse();
+    return 0;
+}

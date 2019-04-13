@@ -75,7 +75,7 @@ return                	return RET;
 [_a-zA-Z][_a-zA-Z0-9]*   						return IDENTIFIER; 	
 [\t  ]+                							;
 [\n]					{yylineno=yylineno+1;}
-(false|true)            { return BOOLEAN_VALUE;}
+\(false\|true\)            { return BOOLEAN_VALUE;}
 
 
 
