@@ -66,7 +66,7 @@ statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleratio
 
 		| SWITCH ARGUMENT_OBRACKET IDENTIFIER ARGUMENT_CBRACKET SwitchBody   		  	{printf("Switch case\n");}
 
-		| PRINT ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON	                  {printf("Print\n");}
+		| PRINT ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON	                  {printf("Print %d\n",$exp);}
 		
 		| function	                                            										{printf("Function\n");}
 
@@ -114,7 +114,7 @@ exp:    exp PLUS exp		{$$ = $1 + $3;}
 		 |  exp MINUS exp		{$$ = $1 - $3;}
 		 |  exp MULTIPLY exp		{$$ = $1 * $3;}
 		 |  exp DIVIDE exp		{$$ = $1 / $3;}
-		// |  exp POWER exp		{$$ = ;}
+//		 |  exp POWER exp		{$$ = pow($1,$3);}
 		 |  exp MODULUS exp		{$$ = $1 % $3;}
 		 |  exp AND exp		{$$ = $1 & $3;}
 		 |  exp OR exp		{$$ = $1 | $3;}
@@ -129,7 +129,7 @@ exp:    exp PLUS exp		{$$ = $1 + $3;}
 		 |  exp RELATION_LESS_EQUAL exp		{$$ = $1 <= $3;}
 		 |  exp RELATION_GREATER_EQUAL exp		{$$ = $1 >= $3;}
 
-		 | '('exp')' 									{$$=$2;}
+		 | ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET 									{$$=$2;}
 		 | value									{$$=$1;}
 			;
 

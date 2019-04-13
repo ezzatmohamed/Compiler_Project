@@ -40,14 +40,13 @@ default               	return DEFAULT;
 false					return FALSE;
 true					return TRUE;
 
-print        			return PRINT;
+prints        			return PRINT;
 return                	return RET;
 
 \+ 						return PLUS;
 \- 						return MINUS;
 \* 					   	return MULTIPLY;
 \/ 			            return DIVIDE;
-\^                      return POWER;
 \%						return MODULUS;
 \= 						return ASSIGN;
 
@@ -76,8 +75,6 @@ return                	return RET;
 [\t  ]+                							;
 [\n]					{yylineno=yylineno+1;}
 \(false\|true\)            { return BOOLEAN_VALUE;}
-
-
 
 
 %% 
