@@ -28,8 +28,8 @@
 %%
 
 program:
-        program statement '\n'
-        | statement
+        program statements '\n'
+				|
         ;
 
 statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleration \n");}
