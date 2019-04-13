@@ -66,7 +66,7 @@ statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleratio
 
 		| SWITCH ARGUMENT_OBRACKET IDENTIFIER ARGUMENT_CBRACKET SwitchBody   		  	{printf("Switch case\n");}
 
-		| PRINT ARGUMENT_OBRACKET exp ARGUMENT_OBRACKET SEMICOLON	                  {printf("Print\n");}
+		| PRINT ARGUMENT_OBRACKET exp ARGUMENT_OERACKET SEMICOLON	                  {printf("Print\n");}
 		
 		| function	                                            										{printf("Function\n");}
 
