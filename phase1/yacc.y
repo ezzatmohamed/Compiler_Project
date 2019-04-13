@@ -1,4 +1,4 @@
-	//*****************************Tokens*************************************
+//*****************************Tokens*************************************
 %token SCOPE_OBRACE SCOPE_CBRACE ARGUMENT_OBRACKET ARGUMENT_CBRACKET SEMICOLON COLON COMMA 
 %token TYPE_INT TYPE_FLOAT TYPE_CHAR TYPE_BOOL TYPE_CONSTANT TYPE_STRING
 %token IF ELSE DO WHILE FOR BREAK CONTINUE SWITCH CASE FALSE TRUE DEFAULT PRINT RET 
@@ -54,17 +54,22 @@ statement:	type IDENTIFIER SEMICOLON   {printf (" Decleration \n");}
 
 		| IF ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET scope ELSE scope	{printf("If-Elsestatement\n");}
 
-		| SWITCH ARGUMENT_OBRACKET IDENTIFIER ARGUMENT_CBRACKET switchBody      {printf("Switch case\n");}
-		
-		| increment SEMICOLON
+		| SWITCH ARGUMENT_OBRACKET IDENTIFIER ARGUMENT_CBRACKET SwitchBody      {printf("Switch case\n");}
 
 		| PRINT exp 	SEMICOLON	                        {printf("Print\n");}
 		
 		| function	                                            	
 
-		| scope											{printf("New braces scope\n");}
+		| scope											{printf("New braces scope\n");} //Not sure
 
 		;
+
+
+SwitchBody: SCOPE_OBRACE CaseStatment SCOPE_CBRACE
+						;
+
+CaseStatment : CASE ARGUMENT_OBRACKET value ARGUMENT_CBRACKET scope CaseStatment
+							| DEFAULT scope
 
 type:	  TYPE_INT 
 			| TYPE_FLOAT 
@@ -73,10 +78,15 @@ type:	  TYPE_INT
 			| TYPE_STRING
 
 
+
 exp:   exp ArithmeticOp exp
 		 | exp BoolOp exp
+		 | (exp) 
+		 | IDENTIFIER
 		 | value
 
+ArithExp : ArithExp ArithmeticOp ArithExp 
+					
 
 
 
@@ -109,7 +119,7 @@ value:      INTEGER_VALUE
 					| STRING_VALUE
 					| CHARACTER
 					| BOOLEAN_VALUE   
-					| IDENTIFIER
+					
 
 
 
@@ -134,25 +144,9 @@ scope:	SCOPE_OBRACE SCOPE_CBRACE
 		;	
 
 		
-forBody: increment
-		| IDENTIFIER ASSIGN
 
-
-increment: IDENTIFIER  INCREMENT              { $$ = $1+1; }
-		 | IDENTIFIER DECREMENT                { $$ = $1-1; }
-		 ;		
-
-
-
-/*		 
-exp:
-        INTEGER
-        | VARIABLE                      { $$ = sym[$1]; }
-        | exp '+' exp     { $$ = $1 + $3; }
-        | exp '-' exp     { $$ = $1 - $3; }
-        | exp '*' exp     { $$ = $1 * $3; }
-        | exp '/' exp     { $$ = $1 / $3; }
-        | '(' exp ')'            { $$ = $2; }
-        ;*/
+//increment: IDENTIFIER  INCREMENT              { $$ = $1+1; }
+	//	 | IDENTIFIER DECREMENT                { $$ = $1-1; }
+		 //;		
 
 %%

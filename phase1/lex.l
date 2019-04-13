@@ -27,11 +27,14 @@ while 					return WHILE;
 for 					return FOR;
 break               	return BREAK;
 continue				return CONTINUE;
+
 switch                	return SWITCH;
 case                  	return CASE;
+default               	return DEFAULT;
+
 false					return FALSE;
 true					return TRUE;
-default               	return DEFAULT;
+
 print        			return PRINT;
 return                	return RET;
 
