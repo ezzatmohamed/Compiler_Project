@@ -18,15 +18,20 @@ float					return TYPE_FLOAT;
 char				   	return TYPE_CHAR;
 bool					return TYPE_BOOL;
 const					return TYPE_CONSTANT;
-string 					return TYPE_STRING;   	
+str 					return TYPE_STRING;   	
 
 if			  			return IF;
 else 					return ELSE;
+
+
 do						return DO;
 while 					return WHILE;
 for 					return FOR;
 break               	return BREAK;
 continue				return CONTINUE;
+repeat                  return REPEAT;
+until                   return UNTIL;
+
 
 switch                	return SWITCH;
 case                  	return CASE;
@@ -50,8 +55,6 @@ return                	return RET;
 \|						return OR;
 \!						return NOT;
 
-\+\+					return INCREMENT;
-\-\-					return DECREMENT;
 \=\= 		    		return RELATION_EQUALS;
 \!\=					return RELATION_NOTEQUAL;
 \<						return RELATION_LESS_THAN;
