@@ -109,7 +109,8 @@ value:      INTEGER_VALUE   									{$$=$1;}
 					| FLOATINPOINT_VALUE   							{$$=$1;}
 					| STRING_VALUE  										{$$=$1;}
 					| CHARACTER  												{$$=$1;}
-					| BOOLEAN_VALUE     								{$$=$1;}
+					| FALSE															{$$=$1;}
+					| TRUE															{$$=$1;}
 					| IDENTIFIER					  						{$$=$1;}
 					;
 
