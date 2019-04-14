@@ -44,9 +44,9 @@ statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleratio
 		
 		| DO scope WHILE ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON					{printf("Do while\n");}
 
-		| FOR ARGUMENT_OBRACKET TYPE_INT IDENTIFIER ASSIGN exp SEMICOLON 
+		| FOR ARGUMENT_OBRACKET  IDENTIFIER ASSIGN exp SEMICOLON 
 		  exp SEMICOLON
-		  IDENTIFIER ASSIGN exp ARGUMENT_CBRACKET
+		  IDENTIFIER ASSIGN exp SEMICOLON ARGUMENT_CBRACKET
 		  scope																																		  {printf("For loop\n");}
 
 		//Repeat

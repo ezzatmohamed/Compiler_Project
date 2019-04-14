@@ -41,7 +41,7 @@ default               	return DEFAULT;
 false					return FALSE;
 true					return TRUE;
 
-prints        			return PRINT;
+echo        			return PRINT;
 return                	return RET;
 
 \+ 						return PLUS;
@@ -53,7 +53,7 @@ return                	return RET;
 
 \&						return AND;
 \|						return OR;
-\!						return NOT;
+not						return NOT;
 
 \=\= 		    		return RELATION_EQUALS;
 \!\=					return RELATION_NOTEQUAL;
@@ -61,20 +61,20 @@ return                	return RET;
 \>						return RELATION_GREATER_THAN;
 \<\=   					return RELATION_LESS_EQUAL;
 \>\=					return RELATION_GREATER_EQUAL;
-\&\&					return RELATION_AND;
-\|\|					return RELATION_OR;
+and					return RELATION_AND;
+or					return RELATION_OR;
 
 
 
 
 
-[0-9]+                  {yylval = atoi(yytext); return INTEGER_VALUE;}
-[0-9]+\.[0-9]+          {yylval = atof(yytext); return FLOATINPOINT_VALUE;}
+[0-9]+                                          {yylval = atoi(yytext); return INTEGER_VALUE;}
+[0-9]+\.[0-9]+                                  {yylval = atof(yytext); return FLOATINPOINT_VALUE;}
 \"[\x23-\x7E =\?!\*()<>+/^%~|&@#;{}.]*\"     	return STRING_VALUE;
 \'[\x23-\x7E =\?!\*()<>+/^%~|&@#;{}.]?\'        return CHARACTER;
 [_a-zA-Z][_a-zA-Z0-9]*   						return IDENTIFIER; 	
 [\t  ]+                							;
-[\n]					{yylineno=yylineno+1;}
+[\n]					                        {yylineno=yylineno+1;}
 
 .                           yyerror("Unknown character");
 
