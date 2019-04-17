@@ -75,11 +75,11 @@ CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET scope Case
 							| DEFAULT scope
 							;	
 
-type:	  TYPE_INT 							{$$=$1;}
-			| TYPE_FLOAT  							{$$=$1;}
-			| TYPE_CHAR  							{$$=$1;}
-			| TYPE_BOOL  							{$$=$1;}
-			| TYPE_STRING 							{$$=$1;}
+type:	  TYPE_INT 					
+			| TYPE_FLOAT  			
+			| TYPE_CHAR  						
+			| TYPE_BOOL  				
+			| TYPE_STRING 			
 			;
 
 exp:    exp PLUS exp		{$$ = $1 + $3;}
@@ -105,13 +105,13 @@ exp:    exp PLUS exp		{$$ = $1 + $3;}
 			;
 
 
-value:      INTEGER_VALUE   									{$$=$1;}
-					| FLOATINPOINT_VALUE   							{$$=$1;}
-					| STRING_VALUE  										{$$=$1;}
-					| CHARACTER  												{$$=$1;}
-					| FALSE															{$$=$1;}
-					| TRUE															{$$=$1;}
-					| IDENTIFIER					  						{$$=$1;}
+value:      INTEGER_VALUE   									
+					| FLOATINPOINT_VALUE   							
+					| STRING_VALUE  									
+					| CHARACTER  											
+					| FALSE														
+					| TRUE														
+					| IDENTIFIER					  				
 					;
 
 

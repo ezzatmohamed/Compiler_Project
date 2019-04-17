@@ -1559,194 +1559,122 @@ yyreduce:
 #line 1560 "y.tab.c" /* yacc.c:1652  */
     break;
 
-  case 19:
-#line 78 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1566 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 20:
-#line 79 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1572 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 21:
-#line 80 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1578 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 22:
-#line 81 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1584 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 23:
-#line 82 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1590 "y.tab.c" /* yacc.c:1652  */
-    break;
-
   case 24:
 #line 85 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] + yyvsp[0];}
-#line 1596 "y.tab.c" /* yacc.c:1652  */
+#line 1566 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 25:
 #line 86 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] - yyvsp[0];}
-#line 1602 "y.tab.c" /* yacc.c:1652  */
+#line 1572 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 26:
 #line 87 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] * yyvsp[0];}
-#line 1608 "y.tab.c" /* yacc.c:1652  */
+#line 1578 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 27:
 #line 88 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] / yyvsp[0];}
-#line 1614 "y.tab.c" /* yacc.c:1652  */
+#line 1584 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 28:
 #line 89 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] % yyvsp[0];}
-#line 1620 "y.tab.c" /* yacc.c:1652  */
+#line 1590 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 29:
 #line 90 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] & yyvsp[0];}
-#line 1626 "y.tab.c" /* yacc.c:1652  */
+#line 1596 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 30:
 #line 91 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] | yyvsp[0];}
-#line 1632 "y.tab.c" /* yacc.c:1652  */
+#line 1602 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 31:
 #line 92 "yacc.y" /* yacc.c:1652  */
     {yyval = !yyvsp[0];}
-#line 1638 "y.tab.c" /* yacc.c:1652  */
+#line 1608 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 32:
 #line 94 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] && yyvsp[0];}
-#line 1644 "y.tab.c" /* yacc.c:1652  */
+#line 1614 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 33:
 #line 95 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] || yyvsp[0];}
-#line 1650 "y.tab.c" /* yacc.c:1652  */
+#line 1620 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 34:
 #line 96 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] == yyvsp[0];}
-#line 1656 "y.tab.c" /* yacc.c:1652  */
+#line 1626 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 35:
 #line 97 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] != yyvsp[0];}
-#line 1662 "y.tab.c" /* yacc.c:1652  */
+#line 1632 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 36:
 #line 98 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] < yyvsp[0];}
-#line 1668 "y.tab.c" /* yacc.c:1652  */
+#line 1638 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 37:
 #line 99 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] > yyvsp[0];}
-#line 1674 "y.tab.c" /* yacc.c:1652  */
+#line 1644 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 38:
 #line 100 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] <= yyvsp[0];}
-#line 1680 "y.tab.c" /* yacc.c:1652  */
+#line 1650 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 39:
 #line 101 "yacc.y" /* yacc.c:1652  */
     {yyval = yyvsp[-2] >= yyvsp[0];}
-#line 1686 "y.tab.c" /* yacc.c:1652  */
+#line 1656 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 40:
 #line 103 "yacc.y" /* yacc.c:1652  */
     {yyval=yyvsp[-1];}
-#line 1692 "y.tab.c" /* yacc.c:1652  */
+#line 1662 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 41:
 #line 104 "yacc.y" /* yacc.c:1652  */
     {yyval=yyvsp[0];}
-#line 1698 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 42:
-#line 108 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1704 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 43:
-#line 109 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1710 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 44:
-#line 110 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1716 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 45:
-#line 111 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1722 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 46:
-#line 112 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1728 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 47:
-#line 113 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1734 "y.tab.c" /* yacc.c:1652  */
-    break;
-
-  case 48:
-#line 114 "yacc.y" /* yacc.c:1652  */
-    {yyval=yyvsp[0];}
-#line 1740 "y.tab.c" /* yacc.c:1652  */
+#line 1668 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 51:
 #line 121 "yacc.y" /* yacc.c:1652  */
     {printf("function\n");}
-#line 1746 "y.tab.c" /* yacc.c:1652  */
+#line 1674 "y.tab.c" /* yacc.c:1652  */
     break;
 
 
-#line 1750 "y.tab.c" /* yacc.c:1652  */
+#line 1678 "y.tab.c" /* yacc.c:1652  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
