@@ -123,10 +123,10 @@ value:      INTEGER_VALUE
 FuncRet: RET  exp | RET		;											
 
 
-function: IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SCOPE_OBRACE statements FuncRet  SEMICOLON   SCOPE_CBRACE   {printf("function\n");}
+function: IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SCOPE_OBRACE FuncBody   SCOPE_CBRACE   
 	   ;
 
-
+FuncBody: statements FuncRet  SEMICOLON | FuncRet SEMICOLON ;
 statements:  statement
 		| statements statement
 		;	
