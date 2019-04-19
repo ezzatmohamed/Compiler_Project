@@ -65,6 +65,11 @@ statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleratio
 		
 		| function	                                            										{printf("Function\n");}
 
+		| IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SEMICOLON  {printf("void function call\n");}
+		
+		| IDENTIFIER ASSIGN IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SEMICOLON {printf("function call\n");}
+	  
+	   
 		;
 
 
