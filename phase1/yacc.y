@@ -24,12 +24,13 @@
     #include <stdio.h>
     int yylex(void);
     void yyerror(char *);
+		int symbols[100];
 %}
 %%
 
 program:
         program statements '\n'
-				|
+				| statement
         ;
 
 statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleration \n");}
@@ -87,10 +88,10 @@ type:	  TYPE_INT
 			| TYPE_STRING 			
 			;
 
-exp:    exp PLUS exp		{$$ = $1 + $3;}
-		 |  exp MINUS exp		{$$ = $1 - $3;}
-		 |  exp MULTIPLY exp		{$$ = $1 * $3;}
-		 |  exp DIVIDE exp		{$$ = $1 / $3;}
+exp:    exp PLUS exp		{printf("Plus\n");}
+		 |  exp MINUS exp		{printf("minus\n");}
+		 |  exp MULTIPLY exp		{printf("mult\n");}
+		 |  exp DIVIDE exp		{printf("divide\n");}
 		 |  exp MODULUS exp		{$$ = $1 % $3;}
 		 |  exp AND exp		{$$ = $1 & $3;}
 		 |  exp OR exp		{$$ = $1 | $3;}
