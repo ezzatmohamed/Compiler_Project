@@ -23,7 +23,7 @@ void push(struct node *new_node)
 } 
 
 
-void Declare(char *name,Var_Type var_type)
+void Declare(char *name,char  *var_type)
 {
 
     // if no variable is declared with this name.
@@ -46,7 +46,7 @@ void Declare(char *name,Var_Type var_type)
 }
 
 
-void Assign(char *name , char *val,Var_Type var_type)
+void Assign(char *name , char *val,char  *var_type)
 {
     search(name);
     if( current == NULL)
@@ -56,10 +56,9 @@ void Assign(char *name , char *val,Var_Type var_type)
     }
     else if( current->value.type != var_type )
     {
-        printf("Error : mismatched type ! \n");
+        printf("Error : type mismatch ! \n");
         return;
     }
 
     current->value.val = val;
-
 }

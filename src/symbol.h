@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef enum{INT,FLOAT,CHAR,STRING,BOOL,CONST} Var_Type;
+//typedef enum{INT,FLOAT,CHAR,STRING,BOOL,CONST} Var_Type;
+
+
 
 
 
@@ -12,9 +14,11 @@ typedef enum{INT,FLOAT,CHAR,STRING,BOOL,CONST} Var_Type;
 // if it's ( int ,float,... ) we convert it to string before we store it.
 typedef struct Var
 {
-    Var_Type type;
+    char* type;
     char* name;
     char* val;
+
+
 };
 
 
@@ -32,5 +36,5 @@ struct node *head = NULL,*tail = NULL,*current=NULL;
 
 void search(char *x);
 void push(struct node *new_node) ;
-void Declare(char *name,Var_Type var_type);
-void Assign(char *name , char *val,Var_Type var_type);
+void Declare(char *name,char* var_type);
+void Assign(char *name , char *val,char* var_type);

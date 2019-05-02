@@ -1,3 +1,22 @@
+%{  
+    #include <stdio.h>
+		#include "symbol.h"
+    int yylex(void);
+    void yyerror(char *);
+		int symbols[100];
+
+	typedef struct ExpInfo {
+	    char type[10];
+			char *val[20];
+	} ExpInfo;
+}
+%}
+%union
+{
+	char name[20];
+	struct ExpInfo info;
+}
+
 //*****************************Tokens*************************************
 %token SCOPE_OBRACE SCOPE_CBRACE ARGUMENT_OBRACKET ARGUMENT_CBRACKET SEMICOLON COLON COMMA 
 %token TYPE_INT TYPE_FLOAT TYPE_CHAR TYPE_BOOL TYPE_CONSTANT TYPE_STRING
@@ -20,12 +39,8 @@
 //Unary minus ambiguity
 %nonassoc UMINUS
 
-%{  
-    #include <stdio.h>
-    int yylex(void);
-    void yyerror(char *);
-		int symbols[100];
-%}
+
+
 %%
 
 program:
@@ -33,9 +48,9 @@ program:
 				| statement
         ;
 
-statement:	type IDENTIFIER SEMICOLON   																				{printf (" Decleration \n");}
-		
-		| IDENTIFIER ASSIGN exp SEMICOLON																						{printf( "Initilization \n");}
+statement:	type IDENTIFIER SEMICOLON   																				{  Declare($2,$1);   printf (" Decleration \n"); }
+
+		| IDENTIFIER ASSIGN exp SEMICOLON																						{ Assign($1,$3,$3.type); printf( "Initilization \n");}
 		
 		| TYPE_CONSTANT type IDENTIFIER ASSIGN exp SEMICOLON 														{printf("Constant Assignment\n");}
 		
@@ -81,21 +96,21 @@ CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET scope Case
 							| DEFAULT scope
 							;	
 
-type:	  TYPE_INT 					
-			| TYPE_FLOAT  			
-			| TYPE_CHAR  						
-			| TYPE_BOOL  				
-			| TYPE_STRING 			
+type:	  TYPE_INT 					{$$ = $1;}
+			| TYPE_FLOAT  			{$$ = $1;}
+			| TYPE_CHAR  				{$$ = $1;}
+			| TYPE_BOOL  				{$$ = $1;}
+			| TYPE_STRING 			{$$ = $1;}
 			;
 
-exp:    exp PLUS exp		{printf("Plus\n");}
-		 |  exp MINUS exp		{printf("minus\n");}
+exp:    exp PLUS exp				{printf("Plus\n");}
+		 |  exp MINUS exp				{printf("minus\n");}
 		 |  exp MULTIPLY exp		{printf("mult\n");}
-		 |  exp DIVIDE exp		{printf("divide\n");}
-		 |  exp MODULUS exp		{$$ = $1 % $3;}
-		 |  exp AND exp		{$$ = $1 & $3;}
-		 |  exp OR exp		{$$ = $1 | $3;}
-		 |  NOT exp								{$$ = !$2;}
+		 |  exp DIVIDE exp			{printf("divide\n");}
+		 |  exp MODULUS exp			{$$ = $1 % $3;}
+		 |  exp AND exp					{$$ = $1 & $3;}
+		 |  exp OR exp					{$$ = $1 | $3;}
+		 |  NOT exp							{$$ = !$2;}
 
 		 |  exp RELATION_AND exp		{$$ = $1 && $3;}
 		 |  exp RELATION_OR exp		{$$ = $1 || $3;}
@@ -111,13 +126,18 @@ exp:    exp PLUS exp		{printf("Plus\n");}
 			;
 
 
-value:      INTEGER_VALUE   									
-					| FLOATINPOINT_VALUE   							
-					| STRING_VALUE  									
-					| CHARACTER  											
-					| FALSE														
-					| TRUE														
-					| IDENTIFIER					  				
+value:      INTEGER_VALUE   									{ $$.type = "int"; sprintf($$.val, "%d", $1); }
+					| FLOATINPOINT_VALUE   							{	$$.type = "float"; snprintf($$.val, sizeof $$.val, "%f", $1); }	
+					| STRING_VALUE  									  {	$$.type = "str"; strcpy($$.val,$1); }
+					| CHARACTER  											  { $$.type = "char"; strcpy($$.val,$1);}
+				//	| FALSE														
+				//	| TRUE							{		}								
+					| IDENTIFIER				{ 	search($1); 
+																	if( current != NULL)
+																	{$$.val = current->value.val; $$.type = current->value.type;}
+																	else 
+																		printf("Error undeclared variable ");
+															}	  				
 					;
 
 
