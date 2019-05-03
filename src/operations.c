@@ -5,10 +5,14 @@
 
 char *operation(struct ExpInfo x, struct ExpInfo y,char *op)
 {
+    struct ExpInfo res;
+    strcpy(res.type,NULL);
+    strcpy(res.val,NULL);
+    
     if(strcmp(x.type,y.type) != 0)
     {
         printf("Error : type mismatch ! \n");
-        return;
+        return NULL;
     }
 
     char result[20];
@@ -88,4 +92,18 @@ char *FloatOper(float x, float y, char *op)
     snprintf(str, sizeof str, "%f", result);
 
     return str;
+}
+
+char *boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
+{
+    if(strcmp(x.type,y.type) != 0)
+    {
+        printf("Error : type mismatch ! \n");
+        return NULL;
+    }
+    char result;
+
+    
+
+    char result[20];
 }

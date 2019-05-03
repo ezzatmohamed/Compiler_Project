@@ -101,38 +101,132 @@ type:	  TYPE_INT 					{$$ = $1;}
 			| TYPE_STRING 			{$$ = $1;}
 			;
 
-exp:    exp PLUS exp				{printf("Plus\n");}
-		 |  exp MINUS exp				{printf("minus\n");}
-		 |  exp MULTIPLY exp		{printf("mult\n");}
-		 |  exp DIVIDE exp			{printf("divide\n");}
-		 |  exp MODULUS exp			{$$ = $1 % $3;}
-		 |  exp AND exp					{$$ = $1 & $3;}
-		 |  exp OR exp					{$$ = $1 | $3;}
-		 |  NOT exp							{$$ = !$2;}
+exp:    exp PLUS exp				{ 
+															strcpy($$.val,operation($1,$3,$2));	
+															if( ( $$.val != NULL )
+															{$$.type = exp.type;}
+															else { $$.type = "NULL";}
 
-		 |  exp RELATION_AND exp		{$$ = $1 && $3;}
-		 |  exp RELATION_OR exp		{$$ = $1 || $3;}
-		 |  exp RELATION_EQUALS exp		{$$ = $1 == $3;}
-		 |  exp RELATION_NOTEQUAL exp		{$$ = $1 != $3;}
-		 |  exp RELATION_LESS_THAN exp		{$$ = $1 < $3;}
-		 |  exp RELATION_GREATER_THAN exp		{$$ = $1 > $3;}
-		 |  exp RELATION_LESS_EQUAL exp		{$$ = $1 <= $3;}
-		 |  exp RELATION_GREATER_EQUAL exp		{$$ = $1 >= $3;}
+															printf("Plus\n");
+														}
+		 |  exp MINUS exp				{
+															strcpy($$.val,operation($1,$3,$2));	
+															if( ( $$.val != NULL )
+															{$$.type = exp.type;}
+															else { $$.type = "NULL";}
+															printf("minus\n");
+														}
+		 |  exp MULTIPLY exp		{
+															strcpy($$.val,operation($1,$3,$2));	
+															if( ( $$.val != NULL )
+															{$$.type = exp.type;}
+															else { $$.type = "NULL";}
+															printf("mult\n");
+														}
+		 |  exp DIVIDE exp			{
+															strcpy($$.val,operation($1,$3,$2));	
+															if( ( $$.val != NULL )
+															{$$.type = exp.type;}
+															else { $$.type = "NULL";}
+															printf("divide\n");
+														}
+		 |  exp MODULUS exp			{
+															strcpy($$.val,operation($1,$3,$2));	
+															if( ( $$.val != NULL )
+															{$$.type = exp.type;}
+															else { $$.type = "NULL";}
+															printf("modulus\n");
+															}
+		 |  exp AND exp					{
+															strcpy($$.val,operation($1,$3,$2));	
+															if( ( $$.val != NULL )
+															{$$.type = exp.type;}
+															else { $$.type = "NULL";}
+															printf("bitwise and\n");
+															}
+		 |  exp OR exp					{
+															strcpy($$.val,operation($1,$3,$2));	
+															if( ( $$.val != NULL )
+															{$$.type = exp.type;}
+															else { $$.type = "NULL";}
+															printf("bitwise or\n");
+		 												}
+		 |  NOT exp							{
+															strcpy($$.val,operation($1,$3,$2));	
+															if( ( $$.val != NULL )
+															{$$.type = exp.type;}
+															else { $$.type = "NULL";}
+															printf("bitwise not\n");
+														}
 
-		 | ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET 									{$$=$2;}
+		 |  exp RELATION_AND exp						{
+			 																		strcpy($$.val,boolOperation($1,$3,$2));	
+																					if( ( $$.val != NULL )
+																					{$$.type = exp.type;}
+																					else { $$.type = "NULL";}
+																				}
+		 |  exp RELATION_OR exp							{
+			 																		strcpy($$.val,boolOperation($1,$3,$2));	
+																					if( ( $$.val != NULL )
+																					{$$.type = exp.type;}
+																					else { $$.type = "NULL";}
+																				}
+		 |  exp RELATION_EQUALS exp					{
+			 																		strcpy($$.val,boolOperation($1,$3,$2));	
+																					if( ( $$.val != NULL )
+																					{$$.type = exp.type;}
+																					else { $$.type = "NULL";}
+																				}
+		 |  exp RELATION_NOTEQUAL exp				{
+			 																		strcpy($$.val,boolOperation($1,$3,$2));	
+																					if( ( $$.val != NULL )
+																					{$$.type = exp.type;}
+																					else { $$.type = "NULL";}
+																				}
+		 |  exp RELATION_LESS_THAN exp			{
+			 																		strcpy($$.val,boolOperation($1,$3,$2));	
+																					if( ( $$.val != NULL )
+																					{$$.type = exp.type;}
+																					else { $$.type = "NULL";}
+																				}
+		 |  exp RELATION_GREATER_THAN exp		{
+			 																		strcpy($$.val,boolOperation($1,$3,$2));	
+																					if( ( $$.val != NULL )
+																					{$$.type = exp.type;}
+																					else { $$.type = "NULL";}
+																				}
+		 |  exp RELATION_LESS_EQUAL exp			{
+			 																		strcpy($$.val,boolOperation($1,$3,$2));	
+																					if( ( $$.val != NULL )
+																					{$$.type = exp.type;}
+																					else { $$.type = "NULL";}
+																				}
+		 |  exp RELATION_GREATER_EQUAL exp	{
+			 																		strcpy($$.val,boolOperation($1,$3,$2));	
+																					if( ( $$.val != NULL )
+																					{$$.type = exp.type;}
+																					else { $$.type = "NULL";}
+																				}
+
+		 | ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET 									{
+																																	strcpy($$.val,boolOperation($1,$3,$2));	
+																																	if( ( $$.val != NULL )
+																																	{$$.type = exp.type;}
+																																	else { $$.type = "NULL";}
+																																}
 		 | value									{$$=$1;}
 			;
 
 
-value:      INTEGER_VALUE   									{ $$.type = "int"; sprintf($$.val, "%d", $1); }
-					| FLOATINPOINT_VALUE   							{	$$.type = "float"; snprintf($$.val, sizeof $$.val, "%f", $1); }	
-					| STRING_VALUE  									  {	$$.type = "str"; strcpy($$.val,$1); }
-					| CHARACTER  											  { $$.type = "char"; strcpy($$.val,$1);}
+value:      INTEGER_VALUE   									{ strcpy($$.type,"int"); sprintf($$.val, "%d", $1); }
+					| FLOATINPOINT_VALUE   							{	strcpy($$.type,"float"); snprintf($$.val, sizeof $$.val, "%f", $1); }	
+					| STRING_VALUE  									  {	strcpy($$.type,"str"); strcpy($$.val,$1); }
+					| CHARACTER  											  { strcpy($$.type,"char"); strcpy($$.val,$1);}
 				//	| FALSE														
 				//	| TRUE							{		}								
 					| IDENTIFIER				{ 	search($1); 
 																	if( current != NULL)
-																	{$$.val = current->value.val; $$.type = current->value.type;}
+																	{strcpy($$.val,current->value.val); strcpy($$.type,current->value.type);}
 																	else 
 																		printf("Error undeclared variable ");
 															}	  				

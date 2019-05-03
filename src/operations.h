@@ -18,6 +18,6 @@ char *operation(struct ExpInfo x, struct ExpInfo y,char *op);
 char *IntOper(int x, int y, char *op);
 char *FloatOper(float x, float y, char *op);
 
-
+char *boolOperation();
 
 
