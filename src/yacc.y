@@ -1,14 +1,12 @@
 %{  
     #include <stdio.h>
 		#include "symbol.h"
+		#include "operations.h"
     int yylex(void);
     void yyerror(char *);
 		int symbols[100];
 
-	typedef struct ExpInfo {
-	    char type[10];
-			char *val[20];
-	} ExpInfo;
+	
 }
 %}
 %union
@@ -147,19 +145,10 @@ FuncRet: RET  exp | RET		;
 function: IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SCOPE_OBRACE FuncBody   SCOPE_CBRACE   
 	   ;
 
-FuncBody: statements FuncRet  SEMICOLON | FuncRet SEMICOLON ;
 statements:  statement
 		| statements statement
 		;	
 		
-args: IDENTIFIER more
-    |
-		;
-
-more:  COMMA IDENTIFIER more 
-		| 
-		;	   
-
 scope:	SCOPE_OBRACE SCOPE_CBRACE
 		| SCOPE_OBRACE statements SCOPE_CBRACE	
 		;	
