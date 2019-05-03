@@ -14,10 +14,10 @@ typedef struct ExpInfo {
 // float to string :  snprintf(str, sizeof str, "%f", myFloat);
 // int to string   :  sprintf(str, "%d", i);
 
-char *operation(struct ExpInfo x, struct ExpInfo y,char *op);
-char *IntOper(int x, int y, char *op);
-char *FloatOper(float x, float y, char *op);
+struct ExpInfo  operation(struct ExpInfo x, struct ExpInfo y,char *op);
+struct ExpInfo  IntOper(int x, int y, char *op);
+struct ExpInfo  FloatOper(float x, float y, char *op);
 
-char *boolOperation();
+struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op);
 
 

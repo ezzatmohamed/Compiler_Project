@@ -3,16 +3,16 @@
 
 
 
-char *operation(struct ExpInfo x, struct ExpInfo y,char *op)
+struct ExpInfo operation(struct ExpInfo x, struct ExpInfo y,char *op)
 {
-    struct ExpInfo res;
-    strcpy(res.type,NULL);
-    strcpy(res.val,NULL);
     
+    struct ExpInfo res;
+    strcpy(res.type,"NULL");
+    strcpy(res.val,"NULL");
     if(strcmp(x.type,y.type) != 0)
     {
         printf("Error : type mismatch ! \n");
-        return NULL;
+        return res;
     }
 
     char result[20];
@@ -33,11 +33,19 @@ char *operation(struct ExpInfo x, struct ExpInfo y,char *op)
     {
         printf("Error: Can't perform this operation on strings.\n");
     }
-    return NULL;
+
+
+    
+    return res;
 
 }
-char *IntOper(int x, int y, char *op)
+struct ExpInfo  IntOper(int x, int y, char *op)
 {
+    struct ExpInfo res;
+    strcpy(res.type,"NULL");
+    strcpy(res.val,"NULL");
+
+
     int result;
     if( strcmp("+",op)  == 0 )
         result = x+y;
@@ -59,17 +67,21 @@ char *IntOper(int x, int y, char *op)
     else
     {
         printf("Error : can't perform this operation on int. \n");
-        return NULL;
+        return res;
     }
 
-    char str[20];
-    sprintf(str, "%d", result);
+    sprintf(res.val, "%d", result);
 
-    return str;
+    strcpy(res.type,"int");
+    return res;
 }
 
-char *FloatOper(float x, float y, char *op)
+struct ExpInfo FloatOper(float x, float y, char *op)
 {
+    struct ExpInfo res;
+    strcpy(res.type,"NULL");
+    strcpy(res.val,"NULL");
+
     float result;
     if( strcmp("+",op)  == 0 )
         result = x+y;
@@ -77,7 +89,6 @@ char *FloatOper(float x, float y, char *op)
         result = x-y;
     else if( strcmp("*",op) == 0)
         result = x*y;
-
     else if (strcmp("/",op) == 0)
         result = x/y;
     else if( strcmp("not",op) == 0)
@@ -85,25 +96,64 @@ char *FloatOper(float x, float y, char *op)
     else
     {
         printf("Error : can't perform this operation on float. \n");
-        return NULL;
+        return res;
     }
 
-    char str[20];
-    snprintf(str, sizeof str, "%f", result);
+    
+    snprintf(res.val, sizeof res.val, "%f", result);
+    strcpy(res.type,"float");
 
-    return str;
+    return res;
 }
 
-char *boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
+struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
 {
+    struct ExpInfo res;
+    strcpy(res.type,"NULL");
+    strcpy(res.val,"NULL");
+
     if(strcmp(x.type,y.type) != 0)
     {
         printf("Error : type mismatch ! \n");
-        return NULL;
+        return res;
     }
     char result;
 
-    
+    if( strcmp(op,"and") == 0)
+    {
 
-    char result[20];
+    }
+    else if( strcmp(op,"or") == 0 )
+    {
+
+    }
+    else if( strcmp(op,"==") == 0 )
+    {
+        sprintf(res.val, "%d", !strcmp(x.val,y.val));
+    }
+    else if( strcmp(op,"!=") == 0 )
+    {
+        sprintf(res.val, "%d", strcmp(x.val,y.val));
+    }
+    else if( strcmp(op,"<") == 0)
+    {
+
+    }
+    else if( strcmp(op,">") == 0 )
+    {
+
+    }
+    else if( strcmp(op,"<=") == 0 )
+    {
+
+    }
+    else if( strcmp(op,">=") == 0 )
+    {
+
+    }
+    
+    return res;
+
+
+
 }
