@@ -111,22 +111,16 @@ struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
     struct ExpInfo res;
     strcpy(res.type,"NULL");
     strcpy(res.val,"NULL");
-
+    
+    
+    char result;
+    
     if(strcmp(x.type,y.type) != 0)
     {
         printf("Error : type mismatch ! \n");
         return res;
     }
-    char result;
-
-    if( strcmp(op,"and") == 0)
-    {
-
-    }
-    else if( strcmp(op,"or") == 0 )
-    {
-
-    }
+    
     else if( strcmp(op,"==") == 0 )
     {
         sprintf(res.val, "%d", !strcmp(x.val,y.val));
@@ -135,6 +129,23 @@ struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
     {
         sprintf(res.val, "%d", strcmp(x.val,y.val));
     }
+    else
+    {
+        if()
+        {}
+        else if(){}
+        else if(){}
+    }
+    
+    if( strcmp(op,"and") == 0)
+    {
+        
+    }
+    else if( strcmp(op,"or") == 0 )
+    {
+
+    }
+    
     else if( strcmp(op,"<") == 0)
     {
 
@@ -152,8 +163,7 @@ struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
 
     }
     
+    strcpy(res.val,"int");
     return res;
-
-
 
 }

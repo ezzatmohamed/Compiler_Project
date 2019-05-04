@@ -5,7 +5,7 @@
 
 typedef struct ExpInfo {
 	    char type[10];
-		char *val[20];
+		char val[20];
 };
 
 // atof() chars to float

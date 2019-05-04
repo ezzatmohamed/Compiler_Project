@@ -14,11 +14,9 @@
 // if it's ( int ,float,... ) we convert it to string before we store it.
 typedef struct Var
 {
-    char* type;
-    char* name;
-    char* val;
-
-
+    char type[10];
+    char name[10];
+    char val[20];
 };
 
 

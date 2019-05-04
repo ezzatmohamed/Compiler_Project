@@ -2,6 +2,7 @@
     #include <stdio.h>
 		#include "symbol.h"
 		#include "operations.h"
+		#include "code.h"
     int yylex(void);
     void yyerror(char *);
 		int symbols[100];
@@ -48,13 +49,13 @@ program:
 
 statement:	type IDENTIFIER SEMICOLON   																				{  Declare($2,$1);   printf (" Decleration \n"); }
 
-		| IDENTIFIER ASSIGN exp SEMICOLON																						{ Assign($1,$3,$3.type); printf( "Initilization \n");}
+		| IDENTIFIER ASSIGN exp SEMICOLON		{ push($1); AssignCode(); Assign($1,$3,$3.type); printf( "Initilization \n");}
 		
-		| TYPE_CONSTANT type IDENTIFIER ASSIGN exp SEMICOLON 														{printf("Constant Assignment\n");}
+		| TYPE_CONSTANT type IDENTIFIER ASSIGN exp SEMICOLON 				{ push($3); AssignCode();   printf("Constant Assignment\n");}
 		
 		
 		/*  Loops */
-		| WHILE ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET scope  											{printf("While Loop\n");}
+		| WHILE {LoopBegin();} ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET {CheckCondition();} scope {LoopEnd();}  											{printf("While Loop\n");}
 		
 		| DO scope WHILE ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON					{printf("Do while\n");}
 
@@ -101,35 +102,36 @@ type:	  TYPE_INT 					{$$ = $1;}
 			| TYPE_STRING 			{$$ = $1;}
 			;
 
-exp:    exp PLUS exp				{$$ = operation($1,$3,$2);printf("Plus\n");}
-		 |  exp MINUS exp				{$$ = operation($1,$3,$2);printf("minus\n");}
-		 |  exp MULTIPLY exp		{$$ = operation($1,$3,$2);printf("mult\n");}
-		 |  exp DIVIDE exp			{$$ = operation($1,$3,$2);printf("divide\n");}
-		 |  exp MODULUS exp			{$$ = operation($1,$3,$2);printf("modulus\n");}
-		 |  exp AND exp					{$$ = operation($1,$3,$2);printf("bitwise and\n");}
-		 |  exp OR exp					{$$ = operation($1,$3,$2);printf("bitwise or\n");}
-		 |  NOT exp							{$$ = operation($2,$2,$1);printf("bitwise not\n");}
+exp:    exp PLUS exp				{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("Plus\n");}
+		 |  exp MINUS exp				{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("minus\n");}
+		 |  exp MULTIPLY exp		{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("mult\n");}
+		 |  exp DIVIDE exp			{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("divide\n");}
+		 |  exp MODULUS exp			{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("modulus\n");}
+		 |  exp AND exp					{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("bitwise and\n");}
+		 |  exp OR exp					{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("bitwise or\n");}
+		 |  NOT exp							{ push($2); OpCode();  $$ = operation($2,$2,$1);printf("bitwise not\n");}
 
-		 |  exp RELATION_AND exp						{$$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_OR exp							{$$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_EQUALS exp					{$$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_NOTEQUAL exp				{$$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_LESS_THAN exp			{$$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_GREATER_THAN exp		{$$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_LESS_EQUAL exp			{$$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_GREATER_EQUAL exp	{$$ = boolOperation($1,$3,$2);}
+		 |  exp RELATION_AND exp						{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
+		 |  exp RELATION_OR exp							{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
+		 |  exp RELATION_EQUALS exp					{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
+		 |  exp RELATION_NOTEQUAL exp				{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
+		 |  exp RELATION_LESS_THAN exp			{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
+		 |  exp RELATION_GREATER_THAN exp		{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
+		 |  exp RELATION_LESS_EQUAL exp			{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
+		 |  exp RELATION_GREATER_EQUAL exp	{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
 		 | ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET 			{$$=$2;}
 		 | value																				{$$=$1;}
 			;
 
 
-value:      INTEGER_VALUE   									{ strcpy($$.type,"int"); sprintf($$.val, "%d", $1); }
-					| FLOATINPOINT_VALUE   							{	strcpy($$.type,"float"); snprintf($$.val, sizeof $$.val, "%f", $1); }	
-					| STRING_VALUE  									  {	strcpy($$.type,"str"); strcpy($$.val,$1); }
-					| CHARACTER  											  { strcpy($$.type,"char"); strcpy($$.val,$1);}
+value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); sprintf($$.val, "%d", $1); }
+					| FLOATINPOINT_VALUE   							{	push($1); strcpy($$.type,"float"); snprintf($$.val, sizeof $$.val, "%f", $1); }	
+					| STRING_VALUE  									  {	push($1); strcpy($$.type,"str"); strcpy($$.val,$1); }
+					| CHARACTER  											  { push($1); strcpy($$.type,"char"); strcpy($$.val,$1);}
 				//	| FALSE														
 				//	| TRUE							{		}								
-					| IDENTIFIER				{ 	search($1); 
+					| IDENTIFIER				{ 	push($1);
+																	search($1); 
 																	if( current != NULL)
 																	{strcpy($$.val,current->value.val); strcpy($$.type,current->value.type);}
 																	else 
