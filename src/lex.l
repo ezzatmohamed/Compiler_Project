@@ -68,8 +68,8 @@ or					return RELATION_OR;
 
 
 
-[0-9]+                                          {yylval = atoi(yytext); return INTEGER_VALUE;}
-[0-9]+\.[0-9]+                                  {yylval = atof(yytext); return FLOATINPOINT_VALUE;}
+[0-9]+                                          {return INTEGER_VALUE;}
+[0-9]+\.[0-9]+                                  {return FLOATINPOINT_VALUE;}
 \"[\x23-\x7E =\?!\*()<>+/^%~|&@#;{}.]*\"     	return STRING_VALUE;
 \'[\x23-\x7E =\?!\*()<>+/^%~|&@#;{}.]?\'        return CHARACTER;
 [_a-zA-Z][_a-zA-Z0-9]*   						return IDENTIFIER; 	

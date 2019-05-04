@@ -3,109 +3,107 @@
 
 
 
-struct ExpInfo operation(struct ExpInfo x, struct ExpInfo y,char *op)
+bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 {
-    
-    struct ExpInfo res;
-    strcpy(res.type,"NULL");
-    strcpy(res.val,"NULL");
-    if(strcmp(x.type,y.type) != 0)
+
+    if(strcmp(xType,yType) != 0)
     {
         printf("Error : type mismatch ! \n");
-        return res;
+        return false;
     }
 
     char result[20];
 
-    if( strcmp("int",x.type))
+    if( strcmp("int",xType))
     {
-        int op1 = atoi(x.val);
-        int op2 = atoi(y.val);
-        return IntOper(op1,op2,op);
+        int op1 = atoi(x);
+        int op2 = atoi(y);
+        int *result;
+        if(IntOper(op1,op2,result,op))
+        {
+            strcpy(type,"int");
+            sprintf(val, "%d", result);
+
+            return true;
+        }
+        return false;
     }
-    else if ( strcmp("float",x.type) == 0)
+    else if ( strcmp("float",xType) == 0)
     {
-        float op1 = atof(x.val);
-        float op2 = atof(y.val);
-        return FloatOper(op1,op2,op);
+        float op1 = atof(x);
+        float op2 = atof(y);
+        float *result;
+        if(FloatOper(op1,op2,result,op))
+        {
+            strcpy(type,"float");
+            snprintf(val, sizeof val, "%f", result);
+            return true;
+        }
+        return false;
     }
-    else if ( strcmp("str",x.type) == 0)
+    else if ( strcmp("str",xType) == 0)
     {
         printf("Error: Can't perform this operation on strings.\n");
     }
 
-
-    
-    return res;
+    return false;
 
 }
-struct ExpInfo  IntOper(int x, int y, char *op)
+bool IntOper(int x, int y,int *result, char *op)
 {
-    struct ExpInfo res;
-    strcpy(res.type,"NULL");
-    strcpy(res.val,"NULL");
 
-
-    int result;
     if( strcmp("+",op)  == 0 )
-        result = x+y;
+        *result = x+y;
     else if( strcmp("-",op) == 0)
-        result = x-y;
+        *result = x-y;
     else if( strcmp("*",op) == 0)
-        result = x*y;
+        *result = x*y;
 
     else if (strcmp("/",op) == 0)
-        result = x/y;
+        *result = x/y;
     else if( strcmp("%",op) == 0)
-        result = x % y;
+        *result = x % y;
     else if( strcmp("&",op) == 0)
-        result = x & y;
+        *result = x & y;
     else if( strcmp("|",op) == 0)
-        result = x | y;
+        *result = x | y;
     else if( strcmp("not",op) == 0)
-        result = !x;
+        *result = !x;
     else
     {
         printf("Error : can't perform this operation on int. \n");
-        return res;
+        return false;
     }
 
-    sprintf(res.val, "%d", result);
-
-    strcpy(res.type,"int");
-    return res;
+    return true;
 }
 
-struct ExpInfo FloatOper(float x, float y, char *op)
+bool FloatOper(float x, float y,float *result, char *op)
 {
-    struct ExpInfo res;
-    strcpy(res.type,"NULL");
-    strcpy(res.val,"NULL");
-
-    float result;
+    
     if( strcmp("+",op)  == 0 )
-        result = x+y;
+        (*result) = x+y;
     else if( strcmp("-",op) == 0)
-        result = x-y;
+        *result = x-y;
     else if( strcmp("*",op) == 0)
-        result = x*y;
+        *result = x*y;
     else if (strcmp("/",op) == 0)
-        result = x/y;
+        *result = x/y;
     else if( strcmp("not",op) == 0)
-        result = !x;
+        *result = !x;
     else
     {
         printf("Error : can't perform this operation on float. \n");
-        return res;
+        return false ;
     }
 
-    
-    snprintf(res.val, sizeof res.val, "%f", result);
-    strcpy(res.type,"float");
 
-    return res;
+//    snprintf(res.val, sizeof res.val, "%f", result);
+//    strcpy(res.type,"float");
+
+    return true;
 }
-
+/*
 struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
 {
     struct ExpInfo res;
@@ -166,4 +164,4 @@ struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
     strcpy(res.val,"int");
     return res;
 
-}
+}*/

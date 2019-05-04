@@ -3,13 +3,27 @@
 		#include "symbol.h"
 		#include "operations.h"
 		#include "code.h"
+
+		
     int yylex(void);
     void yyerror(char *);
-		int symbols[100];
+		
 
-	
-}
+		char Ttype[10];
+		char Tval[20];
+
 %}
+%code requires {
+    
+		struct ExpInfo {
+	    char type[10];
+		char val[20];
+		};
+}
+
+
+
+
 %union
 {
 	char name[20];
@@ -18,11 +32,14 @@
 
 //*****************************Tokens*************************************
 %token SCOPE_OBRACE SCOPE_CBRACE ARGUMENT_OBRACKET ARGUMENT_CBRACKET SEMICOLON COLON COMMA 
-%token TYPE_INT TYPE_FLOAT TYPE_CHAR TYPE_BOOL TYPE_CONSTANT TYPE_STRING
+%token<name> TYPE_INT TYPE_FLOAT TYPE_CHAR TYPE_BOOL TYPE_CONSTANT TYPE_STRING IDENTIFIER
 %token IF ELSE DO WHILE FOR BREAK CONTINUE REPEAT UNTIL SWITCH CASE FALSE TRUE DEFAULT PRINT RET 
-%token PLUS MINUS MULTIPLY DIVIDE POWER MODULUS ASSIGN AND OR NOT INCREMENT DECREMENT  
+%token<name> PLUS MINUS MULTIPLY DIVIDE POWER MODULUS ASSIGN AND OR NOT INCREMENT DECREMENT  
 %token RELATION_EQUALS RELATION_NOTEQUAL RELATION_LESS_THAN RELATION_GREATER_THAN RELATION_LESS_EQUAL RELATION_GREATER_EQUAL 
-%token RELATION_AND RELATION_OR INTEGER_VALUE FLOATINPOINT_VALUE STRING_VALUE CHARACTER IDENTIFIER BOOLEAN_VALUE    
+%token RELATION_AND RELATION_OR 
+%token<name> INTEGER_VALUE FLOATINPOINT_VALUE STRING_VALUE CHARACTER  BOOLEAN_VALUE    
+
+
 
 //**************************Precedences************************************
 %left ASSIGN
@@ -38,8 +55,8 @@
 //Unary minus ambiguity
 %nonassoc UMINUS
 
-
-
+%type<info> exp value
+%type<name> type
 %%
 
 program:
@@ -47,89 +64,148 @@ program:
 				| statement
         ;
 
-statement:	type IDENTIFIER SEMICOLON   																				{  Declare($2,$1);   printf (" Decleration \n"); }
+statement:	type IDENTIFIER SEMICOLON   																		{  Declare($2,$1);   printf (" Decleration \n"); }
 
-		| IDENTIFIER ASSIGN exp SEMICOLON		{ push($1); AssignCode(); Assign($1,$3,$3.type); printf( "Initilization \n");}
+		| Assignment_Statement
 		
-		| TYPE_CONSTANT type IDENTIFIER ASSIGN exp SEMICOLON 				{ push($3); AssignCode();   printf("Constant Assignment\n");}
-		
+		| TYPE_CONSTANT type IDENTIFIER ASSIGN exp SEMICOLON 										{ push($3); AssignCode();   printf("Constant Assignment\n");}
 		
 		/*  Loops */
-		| WHILE {LoopBegin();} ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET {CheckCondition();} scope {LoopEnd();}  											{printf("While Loop\n");}
+		| WHILE {LoopBegin();} ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET 	{CheckCondition();} scope {LoopEnd();} 	{printf("While Loop\n");}
 		
-		| DO scope WHILE ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON					{printf("Do while\n");}
+		| DO {LoopBegin();} scope WHILE ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} SEMICOLON					{printf("Do while\n");}
 
-		| FOR ARGUMENT_OBRACKET  IDENTIFIER ASSIGN exp SEMICOLON 
-		  exp SEMICOLON
-		  IDENTIFIER ASSIGN exp SEMICOLON ARGUMENT_CBRACKET
-		  scope																																		  {printf("For loop\n");}
+		| FOR {LoopBegin();} ARGUMENT_OBRACKET  Assignment_Statement
+		  conditions SEMICOLON {CheckCondition();}
+		  Assignment_Statement ARGUMENT_CBRACKET
+		  scope	ARGUMENT_OBRACKET		Assignment_Statement ARGUMENT_CBRACKET SEMICOLON					{LoopEnd();}																										  {printf("For loop\n");}
 
 		//Repeat
 
-		| REPEAT scope UNTIL ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON			{printf("repeat-until loop\n");}
+		| REPEAT {LoopBegin();} scope UNTIL ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {RepeatCondition();} SEMICOLON			{printf("repeat-until loop\n");}
 
 		//=====================================
 		
-		| IF ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET scope %prec IFX 								{printf("If statement\n");}
+		| IF { IfBegin(); } ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} scope %prec IFX { IfEnd(); printf("If statement\n"); }
 
-		| IF ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET scope ELSE scope								{printf("If-Elsestatement\n");}
+		| IF { IfBegin(); } ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} scope {Else();} ELSE scope	 {IfEnd(); printf("If-Elsestatement\n");}
 
-		| SWITCH ARGUMENT_OBRACKET IDENTIFIER ARGUMENT_CBRACKET SwitchBody   		  	{printf("Switch case\n");}
+		//| SWITCH ARGUMENT_OBRACKET IDENTIFIER ARGUMENT_CBRACKET SwitchBody   		  	{printf("Switch case\n");}
 
-		| PRINT ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON	                  {printf("Print %d\n",$exp);}
+		//| PRINT ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON	                  {printf("Print %d\n",$exp);}
 		
-		| function	                                            										{printf("Function\n");}
-
-		| IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SEMICOLON  {printf("void function call\n");}
-		
-		| IDENTIFIER ASSIGN IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SEMICOLON {printf("function call\n");}
-	  
-	   
 		;
 
 
-SwitchBody: SCOPE_OBRACE CaseStatment SCOPE_CBRACE
-						;
+//SwitchBody: SCOPE_OBRACE CaseStatment SCOPE_CBRACE
+//					;
 
-CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET scope CaseStatment
-							| DEFAULT scope
-							;	
+//CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET scope CaseStatment
+//							| DEFAULT scope
+//							;	
 
-type:	  TYPE_INT 					{$$ = $1;}
-			| TYPE_FLOAT  			{$$ = $1;}
-			| TYPE_CHAR  				{$$ = $1;}
-			| TYPE_BOOL  				{$$ = $1;}
-			| TYPE_STRING 			{$$ = $1;}
+type:	  TYPE_INT 					{strcpy($$,$1);}
+			| TYPE_FLOAT  			{strcpy($$,$1);}
+			| TYPE_CHAR  				{strcpy($$,$1);}
+			| TYPE_BOOL  				{strcpy($$,$1);}
+			| TYPE_STRING 			{strcpy($$,$1);}
 			;
 
-exp:    exp PLUS exp				{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("Plus\n");}
-		 |  exp MINUS exp				{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("minus\n");}
-		 |  exp MULTIPLY exp		{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("mult\n");}
-		 |  exp DIVIDE exp			{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("divide\n");}
-		 |  exp MODULUS exp			{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("modulus\n");}
-		 |  exp AND exp					{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("bitwise and\n");}
-		 |  exp OR exp					{ push($2); OpCode();  $$ = operation($1,$3,$2);printf("bitwise or\n");}
-		 |  NOT exp							{ push($2); OpCode();  $$ = operation($2,$2,$1);printf("bitwise not\n");}
+Assignment_Statement:		IDENTIFIER ASSIGN exp SEMICOLON			{  AssignCode(); Assign($1,$3.val,$3.type); printf( "Initilization \n");}
 
-		 |  exp RELATION_AND exp						{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_OR exp							{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_EQUALS exp					{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_NOTEQUAL exp				{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_LESS_THAN exp			{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_GREATER_THAN exp		{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_LESS_EQUAL exp			{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
-		 |  exp RELATION_GREATER_EQUAL exp	{ push($2); OpCode();  $$ = boolOperation($1,$3,$2);}
-		 | ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET 			{$$=$2;}
-		 | value																				{$$=$1;}
+
+
+
+conditions:
+	 		conditions  RELATION_LESS_THAN exp {push("<");}
+
+    | conditions  RELATION_LESS_EQUAL exp {push("<=");}
+
+    | conditions  RELATION_GREATER_EQUAL exp  {push(">=");}
+
+    | conditions  RELATION_GREATER_THAN exp  {push(">");}
+
+    | conditions  RELATION_NOTEQUAL exp {push("!=");}
+
+    | conditions  RELATION_EQUALS exp  {push("==");} 
+
+    | exp  
+   
+    ;
+														//(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
+exp:    exp PLUS exp				{ push("ADD"); OpCode();  
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															{
+																return 1;
+															}
+															printf("Plus\n");
+														}
+
+		 |  exp MINUS exp				{ push("SUB"); OpCode();    
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															{
+																return 1;
+															}
+															;printf("minus\n");
+														}
+
+		 |  exp MULTIPLY exp		{ push("MUL"); OpCode();   
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															{
+																return 1;
+															}
+															printf("mult\n");
+														}
+
+		 |  exp DIVIDE exp			{ push("DIV"); OpCode();    
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															{
+																return 1;
+															}
+															printf("divide\n");
+														}
+
+		 |  exp MODULUS exp			{ push("MOD"); OpCode();    
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															{
+																return 1;
+															}
+															printf("modulus\n");
+														}
+
+		 |  exp AND exp					{ push("AND"); OpCode();    
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															{
+																return 1;
+															}
+															printf("bitwise and\n");
+														}
+
+		 |  exp OR exp					{ push("OR") ; OpCode();    
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															{
+																return 1;
+															}
+															printf("bitwise or\n");
+														}
+
+		 |  NOT exp							{ push("NOT"); OpCode();    
+															if( !operation($2.val,$2.val,$2.type,$2.type,$$.val,$$.type,$1) )
+															{
+																return 1;
+															}
+															printf("bitwise not\n");
+														}
+														
+		 | 	ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET 			{$$=$2;}
+		 | 	value																				{$$=$1;}
 			;
 
 
-value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); sprintf($$.val, "%d", $1); }
-					| FLOATINPOINT_VALUE   							{	push($1); strcpy($$.type,"float"); snprintf($$.val, sizeof $$.val, "%f", $1); }	
+value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); strcpy($$.val,$1); }
+					| FLOATINPOINT_VALUE   							{	push($1); strcpy($$.type,"float"); strcpy($$.val,$1); }	
 					| STRING_VALUE  									  {	push($1); strcpy($$.type,"str"); strcpy($$.val,$1); }
-					| CHARACTER  											  { push($1); strcpy($$.type,"char"); strcpy($$.val,$1);}
-				//	| FALSE														
-				//	| TRUE							{		}								
+					| CHARACTER  											  { push($1); strcpy($$.type,"char"); strcpy($$.val,$1);}						
 					| IDENTIFIER				{ 	push($1);
 																	search($1); 
 																	if( current != NULL)
@@ -139,12 +215,6 @@ value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); sprintf(
 															}	  				
 					;
 
-
-FuncRet: RET  exp | RET		;											
-
-
-function: IDENTIFIER ARGUMENT_OBRACKET args ARGUMENT_CBRACKET SCOPE_OBRACE FuncBody   SCOPE_CBRACE   
-	   ;
 
 statements:  statement
 		| statements statement

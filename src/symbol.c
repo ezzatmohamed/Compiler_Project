@@ -16,7 +16,7 @@ void search(char *x)
      
 } 
 
-void push(struct node *new_node) 
+void insert(struct node *new_node) 
 {
     new_node->next = head; 
     head    = new_node; 
@@ -38,11 +38,11 @@ void Declare(char *name,char  *var_type)
     
     struct node* new_node = (struct node*) malloc(sizeof(struct node)); 
   
-    new_node->value.name  = name;
-    new_node->value.val  = "NULL";
-    new_node->value.type  = var_type; 
+    strcpy(new_node->value.name,name);
+    strcpy(new_node->value.val,"NULL");
+    strcpy(new_node->value.type,var_type); 
 
-    push(new_node);
+    insert(new_node);
 }
 
 
@@ -60,5 +60,5 @@ void Assign(char *name , char *val,char  *var_type)
         return;
     }
 
-    current->value.val = val;
+    strcpy(current->value.val,val);
 }

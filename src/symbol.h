@@ -12,7 +12,7 @@
 // for variables declaration. we store the variable name as charachters
 // and the variable name as characters.
 // if it's ( int ,float,... ) we convert it to string before we store it.
-typedef struct Var
+struct Var
 {
     char type[10];
     char name[10];
@@ -21,7 +21,7 @@ typedef struct Var
 
 
 // a node for the linked-list
-typedef struct node 
+struct node 
 {
     struct Var value;   
     struct node *next;    
@@ -33,6 +33,6 @@ struct node *head = NULL,*tail = NULL,*current=NULL;
 
 
 void search(char *x);
-void push(struct node *new_node) ;
-void Declare(char *name,char* var_type);
+void insert(struct node *new_node) ;
+void Declare(char *name,char  *var_type);
 void Assign(char *name , char *val,char* var_type);
