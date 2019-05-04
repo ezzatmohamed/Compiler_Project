@@ -4,7 +4,7 @@
 		#include "operations.h"
 		#include "code.h"
 
-		
+			
     int yylex(void);
     void yyerror(char *);
 		
