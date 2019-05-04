@@ -1,10 +1,10 @@
 %{  
     #include <stdio.h>
-		#include "symbol.h"
-		#include "operations.h"
-		#include "code.h"
+		#include "symbol.c"
+		#include "operations.c"
+		#include "code.c"
 
-			
+
     int yylex(void);
     void yyerror(char *);
 		
@@ -26,7 +26,7 @@
 
 %union
 {
-	char name[20];
+	char *name;
 	struct ExpInfo info;
 }
 
@@ -64,7 +64,7 @@ program:
 				| statement
         ;
 
-statement:	type IDENTIFIER SEMICOLON   																		{  Declare($2,$1);   printf (" Decleration \n"); }
+statement:	type IDENTIFIER SEMICOLON   																		{   printf("new_dec : %s   %s \n\n",$2,$1); Declare($2,$1);   printf (" Decleration \n"); }
 
 		| Assignment_Statement
 		

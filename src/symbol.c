@@ -4,14 +4,14 @@
 
 void search(char *x) 
 { 
-    struct node *ptr = head;
+    current  = head;
     while (current != NULL) 
     { 
-        if (ptr->value.name == x) 
+        if (current->value.name == x) 
         {
             break;
         } 
-        ptr = ptr->next; 
+        current = current->next; 
     }
      
 } 
@@ -20,6 +20,9 @@ void insert(struct node *new_node)
 {
     new_node->next = head; 
     head    = new_node; 
+
+     printf("head : %s   %s   %s \n\n",head->value.name,head->value.type,head->value.val);
+   
 } 
 
 
@@ -42,6 +45,7 @@ void Declare(char *name,char  *var_type)
     strcpy(new_node->value.val,"NULL");
     strcpy(new_node->value.type,var_type); 
 
+    printf("new_node : %s   %s   %s\n\n",name,name,name);
     insert(new_node);
 }
 

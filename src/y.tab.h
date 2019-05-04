@@ -184,7 +184,7 @@ union YYSTYPE
 {
 #line 28 "yacc.y" /* yacc.c:1921  */
 
-	char name[20];
+	char *name;
 	struct ExpInfo info;
 
 #line 191 "y.tab.h" /* yacc.c:1921  */

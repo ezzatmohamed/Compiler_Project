@@ -69,11 +69,11 @@
 #line 1 "yacc.y" /* yacc.c:337  */
   
     #include <stdio.h>
-		#include "symbol.h"
-		#include "operations.h"
-		#include "code.h"
+		#include "symbol.c"
+		#include "operations.c"
+		#include "code.c"
 
-		
+
     int yylex(void);
     void yyerror(char *);
 		
@@ -255,7 +255,7 @@ union YYSTYPE
 {
 #line 28 "yacc.y" /* yacc.c:352  */
 
-	char name[20];
+	char *name;
 	struct ExpInfo info;
 
 #line 262 "y.tab.c" /* yacc.c:352  */
@@ -1467,7 +1467,7 @@ yyreduce:
     {
         case 4:
 #line 67 "yacc.y" /* yacc.c:1652  */
-    {  Declare((yyvsp[-1].name),(yyvsp[-2].name));   printf (" Decleration \n"); }
+    {   printf("new_dec : %s   %s \n\n",(yyvsp[-1].name),(yyvsp[-2].name)); Declare((yyvsp[-1].name),(yyvsp[-2].name));   printf (" Decleration \n"); }
 #line 1472 "y.tab.c" /* yacc.c:1652  */
     break;
 
