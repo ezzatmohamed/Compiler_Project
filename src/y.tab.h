@@ -48,11 +48,12 @@ extern int yydebug;
 
     
 		struct ExpInfo {
-	    char type[10];
+	  char type[10];
 		char val[20];
+		char name[20];
 		};
 
-#line 56 "y.tab.h" /* yacc.c:1921  */
+#line 57 "y.tab.h" /* yacc.c:1921  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -182,12 +183,16 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 28 "yacc.y" /* yacc.c:1921  */
+#line 29 "yacc.y" /* yacc.c:1921  */
 
-	char *name;
+	char name[20];
+
+	int iVal;
+	float fVal;
+
 	struct ExpInfo info;
 
-#line 191 "y.tab.h" /* yacc.c:1921  */
+#line 196 "y.tab.h" /* yacc.c:1921  */
 };
 
 typedef union YYSTYPE YYSTYPE;

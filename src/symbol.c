@@ -7,7 +7,7 @@ void search(char *x)
     current  = head;
     while (current != NULL) 
     { 
-        if (current->value.name == x) 
+        if (strcmp(current->value.name,x)==0) 
         {
             break;
         } 
@@ -15,14 +15,25 @@ void search(char *x)
     }
      
 } 
+void displaySymboltable()
+{
+    printf(" =========================== Symbol Table ========================\n\n");
+    struct node *ptr = head;
+    while (ptr != NULL) 
+    { 
+        printf("Name =  %s , Type = %s , Value = %s\n",ptr->value.name,ptr->value.type,ptr->value.val);
+        ptr = ptr->next; 
+    }
+    printf(" =================================================================\n\n");
+}
 
 void insert(struct node *new_node) 
 {
     new_node->next = head; 
     head    = new_node; 
 
-     printf("head : %s   %s   %s \n\n",head->value.name,head->value.type,head->value.val);
-   
+    printf("head : %s   %s   %s \n\n",head->value.name,head->value.type,head->value.val);
+   displaySymboltable();
 } 
 
 
@@ -50,19 +61,21 @@ void Declare(char *name,char  *var_type)
 }
 
 
-void Assign(char *name , char *val,char  *var_type)
+bool Assign(char *name , char *val,char  *var_type)
 {
+    printf("Search : %s\n",name);
     search(name);
     if( current == NULL)
     {
         printf("Error : undeclared variable ! \n");
-        return;
+        return false;
     }
-    else if( current->value.type != var_type )
+    else if( strcmp(current->value.type,var_type) )
     {
         printf("Error : type mismatch ! \n");
-        return;
+        return false;
     }
 
     strcpy(current->value.val,val);
+    return true;
 }

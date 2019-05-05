@@ -28,3 +28,4 @@ void push(char* x);
 
 void AssignCode();
 void OpCode();
+void displayStack();

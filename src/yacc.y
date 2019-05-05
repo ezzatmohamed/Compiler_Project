@@ -16,8 +16,9 @@
 %code requires {
     
 		struct ExpInfo {
-	    char type[10];
+	  char type[10];
 		char val[20];
+		char name[20];
 		};
 }
 
@@ -26,12 +27,16 @@
 
 %union
 {
-	char *name;
+	char name[20];
+
+	int iVal;
+	float fVal;
+
 	struct ExpInfo info;
 }
 
 //*****************************Tokens*************************************
-%token SCOPE_OBRACE SCOPE_CBRACE ARGUMENT_OBRACKET ARGUMENT_CBRACKET SEMICOLON COLON COMMA 
+%token  SCOPE_OBRACE SCOPE_CBRACE ARGUMENT_OBRACKET ARGUMENT_CBRACKET SEMICOLON COLON COMMA 
 %token<name> TYPE_INT TYPE_FLOAT TYPE_CHAR TYPE_BOOL TYPE_CONSTANT TYPE_STRING IDENTIFIER
 %token IF ELSE DO WHILE FOR BREAK CONTINUE REPEAT UNTIL SWITCH CASE FALSE TRUE DEFAULT PRINT RET 
 %token<name> PLUS MINUS MULTIPLY DIVIDE POWER MODULUS ASSIGN AND OR NOT INCREMENT DECREMENT  
@@ -55,8 +60,8 @@
 //Unary minus ambiguity
 %nonassoc UMINUS
 
-%type<info> exp value
-%type<name> type
+%type<info> exp value V
+%type<name> type 
 %%
 
 program:
@@ -111,13 +116,13 @@ type:	  TYPE_INT 					{strcpy($$,$1);}
 			| TYPE_STRING 			{strcpy($$,$1);}
 			;
 
-Assignment_Statement:		IDENTIFIER ASSIGN exp SEMICOLON			{  AssignCode(); Assign($1,$3.val,$3.type); printf( "Initilization \n");}
+Assignment_Statement:		V ASSIGN exp SEMICOLON			{ if(!Assign($1.name,$3.val,$3.type)){return 1;} AssignCode();   printf( "Initilization \n");}
 
 
 
 
 conditions:
-	 		conditions  RELATION_LESS_THAN exp {push("<");}
+	 		conditions  RELATION_LESS_THAN exp{push("<");}
 
     | conditions  RELATION_LESS_EQUAL exp {push("<=");}
 
@@ -134,7 +139,7 @@ conditions:
     ;
 														//(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 exp:    exp PLUS exp				{ push("ADD"); OpCode();  
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"PLUS") )
 															{
 																return 1;
 															}
@@ -142,7 +147,7 @@ exp:    exp PLUS exp				{ push("ADD"); OpCode();
 														}
 
 		 |  exp MINUS exp				{ push("SUB"); OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MINUS") )
 															{
 																return 1;
 															}
@@ -150,7 +155,7 @@ exp:    exp PLUS exp				{ push("ADD"); OpCode();
 														}
 
 		 |  exp MULTIPLY exp		{ push("MUL"); OpCode();   
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MULTIPLY") )
 															{
 																return 1;
 															}
@@ -158,7 +163,7 @@ exp:    exp PLUS exp				{ push("ADD"); OpCode();
 														}
 
 		 |  exp DIVIDE exp			{ push("DIV"); OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"DIVIDE") )
 															{
 																return 1;
 															}
@@ -166,7 +171,7 @@ exp:    exp PLUS exp				{ push("ADD"); OpCode();
 														}
 
 		 |  exp MODULUS exp			{ push("MOD"); OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MODULUS") )
 															{
 																return 1;
 															}
@@ -174,7 +179,7 @@ exp:    exp PLUS exp				{ push("ADD"); OpCode();
 														}
 
 		 |  exp AND exp					{ push("AND"); OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"AND") )
 															{
 																return 1;
 															}
@@ -182,7 +187,7 @@ exp:    exp PLUS exp				{ push("ADD"); OpCode();
 														}
 
 		 |  exp OR exp					{ push("OR") ; OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,$2) )
+															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"OR") )
 															{
 																return 1;
 															}
@@ -190,7 +195,7 @@ exp:    exp PLUS exp				{ push("ADD"); OpCode();
 														}
 
 		 |  NOT exp							{ push("NOT"); OpCode();    
-															if( !operation($2.val,$2.val,$2.type,$2.type,$$.val,$$.type,$1) )
+															if( !operation($2.val,$2.val,$2.type,$2.type,$$.val,$$.type,"NOT") )
 															{
 																return 1;
 															}
@@ -202,19 +207,22 @@ exp:    exp PLUS exp				{ push("ADD"); OpCode();
 			;
 
 
-value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); strcpy($$.val,$1); }
+value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); strcpy($$.val,$1);  }
 					| FLOATINPOINT_VALUE   							{	push($1); strcpy($$.type,"float"); strcpy($$.val,$1); }	
 					| STRING_VALUE  									  {	push($1); strcpy($$.type,"str"); strcpy($$.val,$1); }
 					| CHARACTER  											  { push($1); strcpy($$.type,"char"); strcpy($$.val,$1);}						
-					| IDENTIFIER				{ 	push($1);
+					| V						{$$=$1;}
+					;
+V:  IDENTIFIER				{ 	push($1);
 																	search($1); 
 																	if( current != NULL)
-																	{strcpy($$.val,current->value.val); strcpy($$.type,current->value.type);}
+																	{strcpy($$.name,current->value.name); strcpy($$.val,current->value.val); strcpy($$.type,current->value.type);}
 																	else 
+																	{
 																		printf("Error undeclared variable ");
-															}	  				
-					;
-
+																		return 1;
+																	}
+															}	  
 
 statements:  statement
 		| statements statement

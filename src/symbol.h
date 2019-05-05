@@ -35,4 +35,4 @@ struct node *head = NULL,*tail = NULL,*current=NULL;
 void search(char *x);
 void insert(struct node *new_node) ;
 void Declare(char *name,char  *var_type);
-void Assign(char *name , char *val,char* var_type);
+bool Assign(char *name , char *val,char* var_type);

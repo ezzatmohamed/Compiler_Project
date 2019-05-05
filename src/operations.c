@@ -5,7 +5,7 @@
 
 bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 {
-
+    printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
     if(strcmp(xType,yType) != 0)
     {
         printf("Error : type mismatch ! \n");
@@ -14,26 +14,32 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 
     char result[20];
 
-    if( strcmp("int",xType))
+    if( strcmp("int",xType)==0)
     {
+
+        printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
         int op1 = atoi(x);
         int op2 = atoi(y);
-        int *result;
-        if(IntOper(op1,op2,result,op))
+
+    printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s    ,%d , %d\n",x,y,xType,yType,val,type,op,op1,op2);
+        int result;
+        if(IntOper(op1,op2,&result,op))
         {
+
             strcpy(type,"int");
             sprintf(val, "%d", result);
 
             return true;
         }
+        printf("Error: none int .\n");
         return false;
     }
-    else if ( strcmp("float",xType) == 0)
+    else if ( strcmp("float",xType))
     {
         float op1 = atof(x);
         float op2 = atof(y);
-        float *result;
-        if(FloatOper(op1,op2,result,op))
+        float result;
+        if(FloatOper(op1,op2,&result,op))
         {
             strcpy(type,"float");
             snprintf(val, sizeof val, "%f", result);
@@ -45,29 +51,29 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
     {
         printf("Error: Can't perform this operation on strings.\n");
     }
-
+    printf("Error: none.\n");
     return false;
 
 }
 bool IntOper(int x, int y,int *result, char *op)
 {
 
-    if( strcmp("+",op)  == 0 )
+    if( strcmp("PLUS",op)  == 0 )
         *result = x+y;
-    else if( strcmp("-",op) == 0)
+    else if( strcmp("MINUS",op) == 0)
         *result = x-y;
-    else if( strcmp("*",op) == 0)
+    else if( strcmp("MULTIPLY",op) == 0)
         *result = x*y;
 
-    else if (strcmp("/",op) == 0)
+    else if (strcmp("DIVIDE",op) == 0)
         *result = x/y;
-    else if( strcmp("%",op) == 0)
+    else if( strcmp("MODULUS",op) == 0)
         *result = x % y;
-    else if( strcmp("&",op) == 0)
+    else if( strcmp("AND",op) == 0)
         *result = x & y;
-    else if( strcmp("|",op) == 0)
+    else if( strcmp("OR",op) == 0)
         *result = x | y;
-    else if( strcmp("not",op) == 0)
+    else if( strcmp("NOT",op) == 0)
         *result = !x;
     else
     {
@@ -81,15 +87,15 @@ bool IntOper(int x, int y,int *result, char *op)
 bool FloatOper(float x, float y,float *result, char *op)
 {
     
-    if( strcmp("+",op)  == 0 )
+    if( strcmp("PLUS",op)  == 0 )
         (*result) = x+y;
-    else if( strcmp("-",op) == 0)
+    else if( strcmp("MINUS",op) == 0)
         *result = x-y;
-    else if( strcmp("*",op) == 0)
+    else if( strcmp("MULTIPLY",op) == 0)
         *result = x*y;
-    else if (strcmp("/",op) == 0)
+    else if (strcmp("DIVIDE",op) == 0)
         *result = x/y;
-    else if( strcmp("not",op) == 0)
+    else if( strcmp("NOT",op) == 0)
         *result = !x;
     else
     {
