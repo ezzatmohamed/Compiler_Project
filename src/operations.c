@@ -6,15 +6,27 @@
 bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 {
     printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
+    
+    if( strcmp("Cint",xType) == 0)
+        strcpy(xType,"int");
+    else if( strcmp("Cfloat",xType) == 0)
+        strcpy(xType,"float");
+    
+    if( strcmp("Cint",yType) == 0)
+        strcpy(yType,"int");
+    else if( strcmp("Cfloat",yType) == 0)
+        strcpy(yType,"float");
+
+
     if(strcmp(xType,yType) != 0)
     {
         printf("Error : type mismatch ! \n");
         return false;
     }
 
-    char result[20];
+    char result[100];
 
-    if( strcmp("int",xType)==0)
+    if( strcmp("int",xType)==0 || strcmp("Cint",xType)==0 )
     {
 
         printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
@@ -34,7 +46,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
         printf("Error: none int .\n");
         return false;
     }
-    else if ( strcmp("float",xType) == 0)
+    else if ( strcmp("float",xType) == 0 || strcmp("Cfloat",xType)==0)
     {
         float op1 = atof(x);
         float op2 = atof(y);
@@ -47,11 +59,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
         }
         return false;
     }
-    else if ( strcmp("str",xType) == 0)
-    {
-        printf("Error: Can't perform this operation on strings.\n");
-    }
-    printf("Error: none.\n");
+    printf("Error: Can't perform this operation. \n");
     return false;
 
 }

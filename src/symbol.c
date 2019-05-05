@@ -13,6 +13,7 @@ void search(char *x)
         } 
         current = current->next; 
     }
+
      
 } 
 void displaySymboltable()
@@ -37,7 +38,7 @@ void insert(struct node *new_node)
 } 
 
 
-void Declare(char *name,char  *var_type)
+bool Declare(char *name,char  *var_type)
 {
 
     // if no variable is declared with this name.
@@ -47,7 +48,7 @@ void Declare(char *name,char  *var_type)
     if( current != NULL )
     {
         printf("Error : Already Declared Variable ! \n");
-        return;
+        return false;
     }
     
     struct node* new_node = (struct node*) malloc(sizeof(struct node)); 
@@ -58,6 +59,7 @@ void Declare(char *name,char  *var_type)
 
     printf("new_node : %s   %s   %s\n\n",name,name,name);
     insert(new_node);
+    return true;
 }
 
 
@@ -65,7 +67,7 @@ bool Assign(char *name , char *val,char  *var_type)
 {
     printf("Search : %s\n",name);
     search(name);
-    if( current == NULL)
+    if( current == NULL)    
     {
         printf("Error : undeclared variable ! \n");
         return false;
@@ -75,7 +77,26 @@ bool Assign(char *name , char *val,char  *var_type)
         printf("Error : type mismatch ! \n");
         return false;
     }
+    else if( strcmp("Cint",var_type)==0 || strcmp("Cfloat",var_type)==0 || strcmp("Cstr",var_type)==0 || strcmp("Cchar",var_type)==0 )
+    {
+        printf("Error : can't change a constant ! \n");
+        return false;
+    
+    }
 
     strcpy(current->value.val,val);
     return true;
+}
+bool ConstAssign(char *name,char *const_type,char *val,char * var_type)
+{
+    "C";
+    if( Declare(name,const_type) )
+    {
+        search(name); 
+        strcpy(current->value.val,val);
+        return true;
+    }
+    
+    
+    return false;
 }

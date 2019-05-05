@@ -15,8 +15,8 @@
 struct Var
 {
     char type[10];
-    char name[10];
-    char val[20];
+    char name[50];
+    char val[100];
 };
 
 
@@ -25,7 +25,18 @@ struct node
 {
     struct Var value;   
     struct node *next;    
+    int scope;
 };
+
+struct SymbolTable
+{
+    struct node *head;
+    int parent;
+};
+
+int indexST=0;
+int CurrentST = 0;
+struct SymbolTable ST[100];
 
 //head and tail pointers for the linked-list
 struct node *head = NULL,*tail = NULL,*current=NULL;
@@ -34,5 +45,5 @@ struct node *head = NULL,*tail = NULL,*current=NULL;
 
 void search(char *x);
 void insert(struct node *new_node) ;
-void Declare(char *name,char  *var_type);
+bool Declare(char *name,char  *var_type);
 bool Assign(char *name , char *val,char* var_type);

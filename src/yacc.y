@@ -17,13 +17,10 @@
     
 		struct ExpInfo {
 	  char type[10];
-		char val[20];
-		char name[20];
+		char val[100];
+		char name[50];
 		};
 }
-
-
-
 
 %union
 {
@@ -34,7 +31,7 @@
 
 	struct ExpInfo info;
 }
-
+%expect 26
 //*****************************Tokens*************************************
 %token  SCOPE_OBRACE SCOPE_CBRACE ARGUMENT_OBRACKET ARGUMENT_CBRACKET SEMICOLON COLON COMMA 
 %token<name> TYPE_INT TYPE_FLOAT TYPE_CHAR TYPE_BOOL TYPE_CONSTANT TYPE_STRING IDENTIFIER
@@ -60,7 +57,7 @@
 //Unary minus ambiguity
 %nonassoc UMINUS
 
-%type<info> exp value V
+%type<info> exp value V conditions
 %type<name> type 
 %%
 
@@ -69,18 +66,18 @@ program:
 				| statement
         ;
 
-statement:	type IDENTIFIER SEMICOLON   																		{   printf("new_dec : %s   %s \n\n",$2,$1); Declare($2,$1);   printf (" Decleration \n"); }
+statement:	type IDENTIFIER SEMICOLON   																		{   printf("new_dec : %s   %s \n\n",$2,$1); if(!Declare($2,$1)){return 1;};   printf (" Decleration \n"); }
 
 		| Assignment_Statement
 		
-		| TYPE_CONSTANT type IDENTIFIER ASSIGN exp SEMICOLON 										{ push($3); AssignCode();   printf("Constant Assignment\n");}
+		| TYPE_CONSTANT type V ASSIGN exp SEMICOLON 										{  if(!ConstAssign($3.name,$2,$5.val,$5.type)){return 1;}; AssignCode();   printf("Constant Assignment\n");}
 		
 		/*  Loops */
 		| WHILE {LoopBegin();} ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET 	{CheckCondition();} scope {LoopEnd();} 	{printf("While Loop\n");}
 		
-		| DO {LoopBegin();} scope WHILE ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} SEMICOLON					{printf("Do while\n");}
+		| DO 		{LoopBegin();} scope WHILE ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} SEMICOLON					{printf("Do while\n");}
 
-		| FOR {LoopBegin();} ARGUMENT_OBRACKET  Assignment_Statement
+		| FOR 	{LoopBegin();} ARGUMENT_OBRACKET  Assignment_Statement
 		  conditions SEMICOLON {CheckCondition();}
 		  Assignment_Statement ARGUMENT_CBRACKET
 		  scope	ARGUMENT_OBRACKET		Assignment_Statement ARGUMENT_CBRACKET SEMICOLON					{LoopEnd();}																										  {printf("For loop\n");}
@@ -91,11 +88,14 @@ statement:	type IDENTIFIER SEMICOLON   																		{   printf("new_dec : %
 
 		//=====================================
 		
-		| IF { IfBegin(); } ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} scope %prec IFX { IfEnd(); printf("If statement\n"); }
+		| IF {IfBegin();} If_statment   
 
-		| IF { IfBegin(); } ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} scope {Else();} ELSE scope	 {IfEnd(); printf("If-Elsestatement\n");}
 
-		//| SWITCH ARGUMENT_OBRACKET IDENTIFIER ARGUMENT_CBRACKET SwitchBody   		  	{printf("Switch case\n");}
+//		| IF { IfBegin(); } ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} scope %prec IFX { IfEnd(); printf("If statement\n"); }
+
+//		| IF { IfBegin(); } ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} scope {Else();} ELSE scope	 {IfEnd(); printf("If-Elsestatement\n");}
+
+//		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET SwitchBody   		  	{printf("Switch case\n");}
 
 		//| PRINT ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON	                  {printf("Print %d\n",$exp);}
 		
@@ -105,8 +105,8 @@ statement:	type IDENTIFIER SEMICOLON   																		{   printf("new_dec : %
 //SwitchBody: SCOPE_OBRACE CaseStatment SCOPE_CBRACE
 //					;
 
-//CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET scope CaseStatment
-//							| DEFAULT scope
+//CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET {push($3);CaseBegin();} scope CaseStatment
+//							| DEFAULT {CaseBegin();}  scope {SwitchEnd();}
 //							;	
 
 type:	  TYPE_INT 					{strcpy($$,$1);}
@@ -120,21 +120,26 @@ Assignment_Statement:		V ASSIGN exp SEMICOLON			{ if(!Assign($1.name,$3.val,$3.t
 
 
 
-
+If_statment : ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET { CheckCondition();} If_else
+						;
+						
+If_else : scope %prec IFX 								 { IfEnd(); printf("If statement\n"); }
+						|	scope ELSE {Else();} scope	 {IfEnd(); printf("If-Elsestatement\n");}
+						;
 conditions:
-	 		conditions  RELATION_LESS_THAN exp{push("<");}
+	 		conditions  RELATION_LESS_THAN exp{ if(!CheckType($1.type,$3.type)){return 1;} push("<");}
 
-    | conditions  RELATION_LESS_EQUAL exp {push("<=");}
+    | conditions  RELATION_LESS_EQUAL exp {if(!CheckType($1.type,$3.type)){return 1;}push("<=");}
 
-    | conditions  RELATION_GREATER_EQUAL exp  {push(">=");}
+    | conditions  RELATION_GREATER_EQUAL exp  {if(!CheckType($1.type,$3.type)){return 1;} push(">=");}
 
-    | conditions  RELATION_GREATER_THAN exp  {push(">");}
+    | conditions  RELATION_GREATER_THAN exp  {if(!CheckType($1.type,$3.type)){return 1;} push(">");}
 
-    | conditions  RELATION_NOTEQUAL exp {push("!=");}
+    | conditions  RELATION_NOTEQUAL exp {if(!CheckType($1.type,$3.type)){return 1;} push("!=");}
 
-    | conditions  RELATION_EQUALS exp  {push("==");} 
+    | conditions  RELATION_EQUALS exp  {if(!CheckType($1.type,$3.type)){return 1;} push("==");} 
 
-    | exp  
+    | exp  													{$$=$1;}
    
     ;
 														//(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
@@ -211,9 +216,9 @@ value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); strcpy($
 					| FLOATINPOINT_VALUE   							{	push($1); strcpy($$.type,"float"); strcpy($$.val,$1); }	
 					| STRING_VALUE  									  {	push($1); strcpy($$.type,"str"); strcpy($$.val,$1); }
 					| CHARACTER  											  { push($1); strcpy($$.type,"char"); strcpy($$.val,$1);}						
-					| V						{$$=$1;}
+					| V																	{ $$=$1;}
 					;
-V:  IDENTIFIER				{ 	push($1);
+V:  IDENTIFIER				{ 					push($1);
 																	search($1); 
 																	if( current != NULL)
 																	{strcpy($$.name,current->value.name); strcpy($$.val,current->value.val); strcpy($$.type,current->value.type);}

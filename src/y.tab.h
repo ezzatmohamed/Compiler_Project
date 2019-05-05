@@ -49,8 +49,8 @@ extern int yydebug;
     
 		struct ExpInfo {
 	  char type[10];
-		char val[20];
-		char name[20];
+		char val[100];
+		char name[50];
 		};
 
 #line 57 "y.tab.h" /* yacc.c:1921  */
@@ -183,7 +183,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 29 "yacc.y" /* yacc.c:1921  */
+#line 26 "yacc.y" /* yacc.c:1921  */
 
 	char name[20];
 
