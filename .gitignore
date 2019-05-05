@@ -1,2 +1,8 @@
 # Auto generated dirs
 .vscode/*
+
+
+src/y.tab.c
+src/y.tab.h
+src/output/
+src/lex.yy.c
