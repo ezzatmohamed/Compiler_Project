@@ -21,7 +21,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
         int op1 = atoi(x);
         int op2 = atoi(y);
 
-    printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s    ,%d , %d\n",x,y,xType,yType,val,type,op,op1,op2);
+        printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s    ,%d , %d\n",x,y,xType,yType,val,type,op,op1,op2);
         int result;
         if(IntOper(op1,op2,&result,op))
         {
@@ -34,7 +34,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
         printf("Error: none int .\n");
         return false;
     }
-    else if ( strcmp("float",xType))
+    else if ( strcmp("float",xType) == 0)
     {
         float op1 = atof(x);
         float op2 = atof(y);
@@ -102,11 +102,7 @@ bool FloatOper(float x, float y,float *result, char *op)
         printf("Error : can't perform this operation on float. \n");
         return false ;
     }
-
-
-//    snprintf(res.val, sizeof res.val, "%f", result);
-//    strcpy(res.type,"float");
-
+    
     return true;
 }
 /*
