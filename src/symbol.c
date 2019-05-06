@@ -23,7 +23,7 @@ void search(char *x)
 } 
 void displaySymboltable()
 {
-    printf("=========================== Symbol Table %s ========================\n\n",CurrentST);
+    printf("=========================== Symbol Table %d ========================\n\n",CurrentST);
     struct node *ptr = ST[CurrentST].head;
     while (ptr != NULL) 
     { 
