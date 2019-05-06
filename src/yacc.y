@@ -246,6 +246,8 @@ void yyerror(char *s) {
 }
 
 int main(void) {
+		ST[CurrentST].head = NULL;
+		ST[CurrentST].parent = -1;
     yyparse();
     return 0;
 }

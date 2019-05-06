@@ -39,11 +39,13 @@ int CurrentST = 0;
 struct SymbolTable ST[100];
 
 //head and tail pointers for the linked-list
-struct node *head = NULL,*tail = NULL,*current=NULL;
-
+//struct node *head = NULL,*tail = NULL,*current=NULL;
+struct node *current = NULL;
 
 
 void search(char *x);
 void insert(struct node *new_node) ;
 bool Declare(char *name,char  *var_type);
 bool Assign(char *name , char *val,char* var_type);
+
+void NewScope(); // Create New Symbol-Table

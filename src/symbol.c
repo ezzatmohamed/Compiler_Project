@@ -4,37 +4,42 @@
 
 void search(char *x) 
 { 
-    current  = head;
-    while (current != NULL) 
-    { 
-        if (strcmp(current->value.name,x)==0) 
-        {
-            break;
-        } 
-        current = current->next; 
+    int parentST = CurrentST;
+    while( parentST != -1)
+    {
+        current = ST[parentST].head;
+        while (current != NULL) 
+        { 
+            if (strcmp(current->value.name,x)==0) 
+            {
+                break;
+            } 
+            current = current->next; 
+        }
+        parentST = ST[parentST].parent;
     }
-
+    
      
 } 
 void displaySymboltable()
 {
-    printf(" =========================== Symbol Table ========================\n\n");
-    struct node *ptr = head;
+    printf("=========================== Symbol Table %s ========================\n\n",CurrentST);
+    struct node *ptr = ST[CurrentST].head;
     while (ptr != NULL) 
     { 
         printf("Name =  %s , Type = %s , Value = %s\n",ptr->value.name,ptr->value.type,ptr->value.val);
         ptr = ptr->next; 
     }
-    printf(" =================================================================\n\n");
+    printf("====================================================================\n\n");
 }
 
 void insert(struct node *new_node) 
 {
-    new_node->next = head; 
-    head    = new_node; 
+    new_node->next = ST[CurrentST].head; 
+    ST[CurrentST].head   = new_node; 
 
-    printf("head : %s   %s   %s \n\n",head->value.name,head->value.type,head->value.val);
-   displaySymboltable();
+    printf("head : %s   %s   %s \n\n",ST[CurrentST].head->value.name,ST[CurrentST].head->value.type,ST[CurrentST].head->value.val);
+    displaySymboltable();
 } 
 
 
@@ -89,8 +94,8 @@ bool Assign(char *name , char *val,char  *var_type)
 }
 bool ConstAssign(char *name,char *const_type,char *val,char * var_type)
 {
-    "C";
-    if( Declare(name,const_type) )
+    
+    if( Declare(  name , strcat("C",const_type)  ) )
     {
         search(name); 
         strcpy(current->value.val,val);
@@ -99,4 +104,12 @@ bool ConstAssign(char *name,char *const_type,char *val,char * var_type)
     
     
     return false;
+}
+
+void NewScope()
+{
+    ++indexST;
+    ST[indexST].parent = CurrentST;
+
+    CurrentST = indexST;
 }

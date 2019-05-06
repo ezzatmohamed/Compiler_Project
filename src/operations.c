@@ -1,8 +1,5 @@
 #include "operations.h"
 
-
-
-
 bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 {
     printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
@@ -26,7 +23,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 
     char result[100];
 
-    if( strcmp("int",xType)==0 || strcmp("Cint",xType)==0 )
+    if( strcmp("int",xType)==0  )
     {
 
         printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
@@ -46,7 +43,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
         printf("Error: none int .\n");
         return false;
     }
-    else if ( strcmp("float",xType) == 0 || strcmp("Cfloat",xType)==0)
+    else if ( strcmp("float",xType) == 0)
     {
         float op1 = atof(x);
         float op2 = atof(y);
@@ -72,7 +69,6 @@ bool IntOper(int x, int y,int *result, char *op)
         *result = x-y;
     else if( strcmp("MULTIPLY",op) == 0)
         *result = x*y;
-
     else if (strcmp("DIVIDE",op) == 0)
         *result = x/y;
     else if( strcmp("MODULUS",op) == 0)
@@ -103,8 +99,6 @@ bool FloatOper(float x, float y,float *result, char *op)
         *result = x*y;
     else if (strcmp("DIVIDE",op) == 0)
         *result = x/y;
-    else if( strcmp("NOT",op) == 0)
-        *result = !x;
     else
     {
         printf("Error : can't perform this operation on float. \n");
