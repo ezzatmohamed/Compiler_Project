@@ -5,8 +5,8 @@ void CaseBegin()
 {
     /*
     LoopBegin();
-    printf("CMP T%d,%s,%s \n",temp,stack[top-1],stack[top]) ;      
-    printf("JNZ T%d,L%d \n",temp,);
+    fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-1],stack[top]) ;      
+    fprintf(QuadFile,"JNZ T%d,L%d \n",temp,);
     
     
     temp++; 
@@ -20,16 +20,15 @@ void IfBegin()
 
 void IfEnd()
 {
-
-    printf("\tend%d: \n",label[labelTop]);
+    fprintf(QuadFile,"end%d: \n",label[labelTop]);
     labelTop--;
 }
 void Else()
 {
 
-    printf("\tJMP end%d\n",labelEnd);
+    fprintf(QuadFile,"JMP end%d\n",labelEnd);
 
-    printf("\tend%d: \n",label[labelTop]);
+    fprintf(QuadFile,"end%d: \n",label[labelTop]);
     label[labelTop] = labelEnd;
 
     labelEnd++;
@@ -41,13 +40,13 @@ void LoopBegin()
     label[++labelTop] = labelEnd;
 
     labelEnd++;
-    printf("\tL%d: \n",label[labelTop]);
+    fprintf(QuadFile,"L%d: \n",label[labelTop]);
 }
 
 void LoopEnd()
 {
-    printf("\tJMP L%d \n",label[labelTop]);
-    printf("\tend%d: \n",label[labelTop]);
+    fprintf(QuadFile,"JMP L%d \n",label[labelTop]);
+    fprintf(QuadFile,"end%d: \n",label[labelTop]);
     labelTop--;
 }
 bool CheckType(char *x,char *y)
@@ -71,7 +70,7 @@ bool CheckType(char *x,char *y)
 
     if(strcmp(x,y) != 0)
     {
-        printf("Error : type mismatch ! \n");
+        fprintf(QuadFile,"Error : type mismatch ! \n");
         return false;
     }
 
@@ -82,38 +81,38 @@ void CheckCondition()
     
     if( strcmp(stack[top],">") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JNegZ  T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JNegZ  T%d,end%d \n",temp,label[labelTop]);
     }
     else if( strcmp(stack[top],">=") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JNeg T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JNeg T%d,end%d \n",temp,label[labelTop]);
     
     }
     else if( strcmp(stack[top],"<") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JPosZ T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JPosZ T%d,end%d \n",temp,label[labelTop]);
     }
     else if( strcmp(stack[top],"<=") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JPos T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JPos T%d,end%d \n",temp,label[labelTop]);
     }
     else if( strcmp(stack[top],"!=") == 0)
     {   
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JZ T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JZ T%d,end%d \n",temp,label[labelTop]);
     }
     else if( strcmp(stack[top],"==") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JNZ T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JNZ T%d,end%d \n",temp,label[labelTop]);
     }
     else 
     {
-        printf("JZ %s,end%d \n",stack[top],label[labelTop]);
+        fprintf(QuadFile,"JZ %s,end%d \n",stack[top],label[labelTop]);
         top++;
     }
     top-=3;
@@ -124,38 +123,38 @@ void RepeatCondition()
 {
     if( strcmp(stack[top],">")  == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JPos  T%s,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JPos  T%s,end%d \n",temp,label[labelTop]);
     }
     else if( strcmp(stack[top],">=") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JPosZ T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JPosZ T%d,end%d \n",temp,label[labelTop]);
     
     }
     else if( strcmp(stack[top],"<") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JNeg T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JNeg T%d,end%d \n",temp,label[labelTop]);
     }
     else if( strcmp(stack[top],"<=") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JNegZ T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JNegZ T%d,end%d \n",temp,label[labelTop]);
     }
     else if( strcmp(stack[top],"!=") == 0)
     {   
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JNZ T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JNZ T%d,end%d \n",temp,label[labelTop]);
     }
     else if( strcmp(stack[top],"==") == 0)
     {
-        printf("CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
-        printf("JZ T%d,end%d \n",temp,label[labelTop]);
+        fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-2],stack[top-1])  ;      
+        fprintf(QuadFile,"JZ T%d,end%d \n",temp,label[labelTop]);
     }
     else 
     {
-        printf("JNZ %s,end%d \n",stack[top],label[labelTop]);
+        fprintf(QuadFile,"JNZ %s,end%d \n",stack[top],label[labelTop]);
         top++;
     }
     top-=2;
@@ -172,7 +171,7 @@ void push(char* x)
 void OpCode()
 {
     
-    printf("%s T%d,%s,%s \n",stack[top],temp,stack[top-2],stack[top-1]);
+    fprintf(QuadFile,"%s T%d,%s,%s \n",stack[top],temp,stack[top-2],stack[top-1]);
     top-=2;
 
     sprintf(stack[top], "T%d", temp);
@@ -193,6 +192,6 @@ void displayStack()
 
 void AssignCode()
 {
-    printf("MOV %s,%s \n",stack[top-1],stack[top]);
+    fprintf(QuadFile,"MOV %s,%s \n",stack[top-1],stack[top]);
     top-=2; 
 }

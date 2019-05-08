@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+
+FILE *SymbolFile;
+
 //typedef enum{INT,FLOAT,CHAR,STRING,BOOL,CONST} Var_Type;
 
 
@@ -36,7 +39,7 @@ struct SymbolTable
 
 int indexST=0;
 int CurrentST = 0;
-struct SymbolTable ST[100];
+struct SymbolTable ST[1000];
 
 //head and tail pointers for the linked-list
 //struct node *head = NULL,*tail = NULL,*current=NULL;
@@ -49,3 +52,4 @@ bool Declare(char *name,char  *var_type);
 bool Assign(char *name , char *val,char* var_type);
 
 void NewScope(); // Create New Symbol-Table
+void EndScope();

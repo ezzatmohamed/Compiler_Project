@@ -23,11 +23,11 @@ void search(char *x)
 } 
 void displaySymboltable()
 {
-    printf("=========================== Symbol Table %d ========================\n\n",CurrentST);
+    fprintf(SymbolFile,"=========================== Symbol Table %d ========================\n\n",CurrentST);
     struct node *ptr = ST[CurrentST].head;
     while (ptr != NULL) 
     { 
-        printf("Name =  %s , Type = %s , Value = %s\n",ptr->value.name,ptr->value.type,ptr->value.val);
+        fprintf(SymbolFile,"Name =  %s , Type = %s , Value = %s\n",ptr->value.name,ptr->value.type,ptr->value.val);
         ptr = ptr->next; 
     }
     printf("====================================================================\n\n");
@@ -74,7 +74,7 @@ bool Assign(char *name , char *val,char  *var_type)
     search(name);
     if( current == NULL)    
     {
-        printf("Error : undeclared variable ! \n");
+        printf("Error : undeclared variable ! \n\n");
         return false;
     }
     else if( strcmp(current->value.type,var_type) )
@@ -112,4 +112,9 @@ void NewScope()
     ST[indexST].parent = CurrentST;
 
     CurrentST = indexST;
+}
+
+void EndScope()
+{
+    CurrentST = ST[indexST].parent;
 }

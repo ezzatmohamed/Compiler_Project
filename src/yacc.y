@@ -5,13 +5,11 @@
 		#include "code.c"
 
 
+		int yylineno;
+		extern char *yytext; 
     int yylex(void);
     void yyerror(char *);
 		
-
-		char Ttype[10];
-		char Tval[20];
-
 %}
 %code requires {
     
@@ -59,6 +57,7 @@
 
 %type<info> exp value V conditions
 %type<name> type 
+%start program
 %%
 
 program:
@@ -66,39 +65,34 @@ program:
 				| statement
         ;
 
-statement:	type IDENTIFIER SEMICOLON   																		{   printf("new_dec : %s   %s \n\n",$2,$1); if(!Declare($2,$1)){return 1;};   printf (" Decleration \n"); }
+statement:	type IDENTIFIER SEMICOLON   																		{if(!Declare($2,$1)){return 1;};    }
 
 		| Assignment_Statement
 		
 		| TYPE_CONSTANT type V ASSIGN exp SEMICOLON 										{  if(!ConstAssign($3.name,$2,$5.val,$5.type)){return 1;}; AssignCode();   printf("Constant Assignment\n");}
 		
 		/*  Loops */
-		| WHILE {LoopBegin();} ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET 	{CheckCondition();} scope {LoopEnd();} 	{printf("While Loop\n");}
+		| WHILE {printf("asdsd\n");NewScope(); LoopBegin();} ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET 	{CheckCondition();} scope {LoopEnd(); EndScope();}
 		
-		| DO 		{LoopBegin();} scope WHILE ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} SEMICOLON					{printf("Do while\n");}
+		| DO 		{NewScope(); LoopBegin();} scope WHILE ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition(); } SEMICOLON					{LoopEnd(); EndScope(); printf("Do while\n");}
 
-		| FOR 	{LoopBegin();} ARGUMENT_OBRACKET  Assignment_Statement
+		| FOR 	{NewScope(); LoopBegin();} ARGUMENT_OBRACKET  Assignment_Statement
 		  conditions SEMICOLON {CheckCondition();}
 		  Assignment_Statement ARGUMENT_CBRACKET
-		  scope	ARGUMENT_OBRACKET		Assignment_Statement ARGUMENT_CBRACKET SEMICOLON					{LoopEnd();}																										  {printf("For loop\n");}
+		  scope	ARGUMENT_OBRACKET		Assignment_Statement ARGUMENT_CBRACKET SEMICOLON					{LoopEnd(); EndScope();}																										  {printf("For loop\n");}
 
 		//Repeat
 
-		| REPEAT {LoopBegin();} scope UNTIL ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {RepeatCondition();} SEMICOLON			{printf("repeat-until loop\n");}
+		| REPEAT {NewScope();LoopBegin();} scope UNTIL ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {RepeatCondition();} SEMICOLON			{ LoopEnd(); EndScope(); printf("repeat-until loop\n");}
 
 		//=====================================
 		
-		| IF {IfBegin();} If_statment   
+		| IF {NewScope(); IfBegin();} If_statment   
 
 
-//		| IF { IfBegin(); } ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} scope %prec IFX { IfEnd(); printf("If statement\n"); }
-
-//		| IF { IfBegin(); } ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition();} scope {Else();} ELSE scope	 {IfEnd(); printf("If-Elsestatement\n");}
 
 //		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET SwitchBody   		  	{printf("Switch case\n");}
-
-		//| PRINT ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET SEMICOLON	                  {printf("Print %d\n",$exp);}
-		
+	
 		;
 
 
@@ -123,8 +117,8 @@ Assignment_Statement:		V ASSIGN exp SEMICOLON			{ if(!Assign($1.name,$3.val,$3.t
 If_statment : ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET { CheckCondition();} If_else
 						;
 						
-If_else : scope %prec IFX 								 { IfEnd(); printf("If statement\n"); }
-						|	scope ELSE {Else();} scope	 {IfEnd(); printf("If-Elsestatement\n");}
+If_else : scope %prec IFX 								 { IfEnd(); EndScope(); printf("If statement\n"); }
+						|	scope ELSE {Else();} scope	 {IfEnd();  EndScope(); printf("If-Elsestatement\n");}
 						;
 conditions:
 	 		conditions  RELATION_LESS_THAN exp{ if(!CheckType($1.type,$3.type)){return 1;} push("<");}
@@ -242,12 +236,30 @@ scope:	SCOPE_OBRACE SCOPE_CBRACE
 %%
 
 void yyerror(char *s) {
-    fprintf(stderr, "%s\n", s);
+     printf("%s at line %d : %s \n",s,yylineno,yytext);
 }
 
-int main(void) {
+int main(void) 
+{
+
+
 		ST[CurrentST].head = NULL;
 		ST[CurrentST].parent = -1;
-    yyparse();
-    return 0;
+		QuadFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/quad.txt","w");
+		
+		SymbolFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/symbol.txt","w");
+
+
+		extern FILE *yyin;		
+		yyin = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/program.txt","r");
+
+		
+	  yyparse();
+		
+		fclose (QuadFile);
+		fclose (SymbolFile);
+		fclose (yyin);
+
+
+		return 0;
 }

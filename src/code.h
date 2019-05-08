@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+FILE *QuadFile;
+int LineCounter = 1;
+
+
 
 int label[100];
 int labelTop = -1;
@@ -25,7 +29,7 @@ void CheckCondition();
 void RepeatCondition();
 
 void push(char* x);
-
+void displaySymboltable();
 void AssignCode();
 void OpCode();
 void displayStack();

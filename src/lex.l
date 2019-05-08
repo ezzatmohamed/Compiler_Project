@@ -1,7 +1,8 @@
 %{
     #include "y.tab.h"
     #include <stdlib.h>
-    void yyerror(char *);
+    void yyerror(char *s);
+    int line = 1;
 %}
 
 %%
@@ -76,7 +77,8 @@ or					return RELATION_OR;
 [\t  ]+                							;
 [\n]					                        {yylineno=yylineno+1;}
 
-.                           yyerror("Unknown character");
+.                                               { return yytext[0];}
+
 
 %% 
  int yywrap(void)
