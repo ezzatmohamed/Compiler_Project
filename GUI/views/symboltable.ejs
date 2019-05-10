@@ -1,0 +1,24 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Type</th>
+      <th scope="col">Column heading</th>
+      <th scope="col">Column heading</th>
+      <th scope="col">Column heading</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% var data1 = data %>
+      <% var i = 0 %>
+      <% var words = data1.split(" ")%>
+       <% for(i = 0; i < words.length; i+=4) {%>
+       
+          <tr class="table-info">
+          <th scope="row"> <%= words[i] %></th>
+          <td> <%= words[i+1] %></td>
+          <td> <%= words[i+2] %></td>
+          <td> <%= words[i+3] %></td>
+           </tr>
+        <% }%>
+  </tbody>
+</table> 
