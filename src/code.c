@@ -10,7 +10,7 @@ void CaseBegin()
     
     
     temp++; 
-*/
+    */
 }
 void IfBegin()
 {

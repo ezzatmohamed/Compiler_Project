@@ -4,7 +4,7 @@
 		#include "operations.c"
 		#include "code.c"
 
-
+		FILE *SyntaxError;
 		int yylineno;
 		extern char *yytext; 
     int yylex(void);
@@ -133,6 +133,9 @@ conditions:
 
     | conditions  RELATION_EQUALS exp  {if(!CheckType($1.type,$3.type)){return 1;} push("==");} 
 
+		| conditions RELATION_AND  exp
+
+		| conditions RELATION_OR   exp		
     | exp  													{$$=$1;}
    
     ;
@@ -236,7 +239,7 @@ scope:	SCOPE_OBRACE SCOPE_CBRACE
 %%
 
 void yyerror(char *s) {
-     printf("%s at line %d : %s \n",s,yylineno,yytext);
+    fprintf(SyntaxError,"%s at line %d : %s \n",s,yylineno,yytext);
 }
 
 int main(void) 
@@ -248,7 +251,7 @@ int main(void)
 		QuadFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/quad.txt","w");
 		
 		SymbolFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/symbol.txt","w");
-
+		SyntaxError = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/syntax.txt","w");
 
 		extern FILE *yyin;		
 		yyin = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/program.txt","r");
@@ -258,6 +261,7 @@ int main(void)
 		
 		fclose (QuadFile);
 		fclose (SymbolFile);
+		fclose (SyntaxError);
 		fclose (yyin);
 
 
