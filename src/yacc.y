@@ -91,17 +91,17 @@ statement:	type IDENTIFIER SEMICOLON   																		{if(!Declare($2,$1)){re
 
 
 
-//		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET SwitchBody   		  	{printf("Switch case\n");}
+		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET   { if(strcmp($3.type,"int") != 0 || strcmp($3.type,"Cint") != 0 ){fprintf(SyntaxError,"Error at line %d : Switch only accepts integer \n",yylineno); return 1; }cases[++caseTop] = caseEnd; caseEnd++; printf("Switch case\n");} SwitchBody   		
 	
 		;
 
 
-//SwitchBody: SCOPE_OBRACE CaseStatment SCOPE_CBRACE
-//					;
+SwitchBody: SCOPE_OBRACE CaseStatment SCOPE_CBRACE 
+					;
 
-//CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET {push($3);CaseBegin();} scope CaseStatment
-//							| DEFAULT {CaseBegin();}  scope {SwitchEnd();}
-//							;	
+CaseStatment : CASE ARGUMENT_OBRACKET INTEGER_VALUE ARGUMENT_CBRACKET { push($3);CaseBegin();} scope { CaseEnd();} CaseStatment
+							| DEFAULT {DefaultCase();}  scope {SwitchEnd();}
+							;	
 
 type:	  TYPE_INT 					{strcpy($$,$1);}
 			| TYPE_FLOAT  			{strcpy($$,$1);}
@@ -121,21 +121,22 @@ If_else : scope %prec IFX 								 { IfEnd(); EndScope(); printf("If statement\n
 						|	scope ELSE {Else();} scope	 {IfEnd();  EndScope(); printf("If-Elsestatement\n");}
 						;
 conditions:
-	 		conditions  RELATION_LESS_THAN exp{ if(!CheckType($1.type,$3.type)){return 1;} push("<");}
+	 		exp  RELATION_LESS_THAN exp{ if(!CheckType($1.type,$3.type)){return 1;} push("<");}
 
-    | conditions  RELATION_LESS_EQUAL exp {if(!CheckType($1.type,$3.type)){return 1;}push("<=");}
+    | exp  RELATION_LESS_EQUAL exp {if(!CheckType($1.type,$3.type)){return 1;}push("<=");}
 
-    | conditions  RELATION_GREATER_EQUAL exp  {if(!CheckType($1.type,$3.type)){return 1;} push(">=");}
+    | exp  RELATION_GREATER_EQUAL exp  {if(!CheckType($1.type,$3.type)){return 1;} push(">=");}
 
-    | conditions  RELATION_GREATER_THAN exp  {if(!CheckType($1.type,$3.type)){return 1;} push(">");}
+    | exp  RELATION_GREATER_THAN exp  {if(!CheckType($1.type,$3.type)){return 1;} push(">");}
 
-    | conditions  RELATION_NOTEQUAL exp {if(!CheckType($1.type,$3.type)){return 1;} push("!=");}
+    | exp  RELATION_NOTEQUAL exp {if(!CheckType($1.type,$3.type)){return 1;} push("!=");}
 
-    | conditions  RELATION_EQUALS exp  {if(!CheckType($1.type,$3.type)){return 1;} push("==");} 
+    | exp  RELATION_EQUALS exp  	{if(!CheckType($1.type,$3.type)){return 1;} push("==");} 
 
-		| conditions RELATION_AND  exp
+		//| conditions RELATION_AND  conditions { CheckCondition(); }
 
-		| conditions RELATION_OR   exp		
+		//| conditions RELATION_OR   conditions		{ ORcondition(); }
+
     | exp  													{$$=$1;}
    
     ;

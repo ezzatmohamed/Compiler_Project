@@ -1,0 +1,7 @@
+=========================== Symbol Table 0 ========================
+
+Name =  x , Type = int , Value = NULL
+=========================== Symbol Table 0 ========================
+
+Name =  z , Type = int , Value = NULL
+Name =  x , Type = int , Value = 7

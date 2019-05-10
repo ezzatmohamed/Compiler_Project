@@ -4,13 +4,20 @@
 #include <stdbool.h>
 
 FILE *QuadFile;
-int LineCounter = 1;
+//int LineCounter = 1;
 
 
 
 int label[100];
 int labelTop = -1;
 int labelEnd =0;
+
+
+int cases[100];
+int caseTop = -1;
+int caseEnd =0;
+int caseNum = 0;
+
 
 
 char stack[100][20];
@@ -33,3 +40,6 @@ void displaySymboltable();
 void AssignCode();
 void OpCode();
 void displayStack();
+bool CheckType(char *x,char *y);
+
+void ORcondition();

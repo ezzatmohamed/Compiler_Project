@@ -1,0 +1,15 @@
+MOV x,5 
+Case0: 
+CMP T0,x,1 
+JNZ T0,Case1 
+MOV x,3 
+JMP SwitchEnd0 
+Case1: 
+CMP T1,1,2 
+JNZ T1,Case2 
+MOV x,4 
+JMP SwitchEnd0 
+Case2: 
+MOV x,7 
+SwitchEnd0: 
+MOV z,2 

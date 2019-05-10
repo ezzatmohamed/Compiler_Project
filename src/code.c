@@ -3,14 +3,37 @@
 
 void CaseBegin()
 {
-    /*
-    LoopBegin();
-    fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-1],stack[top]) ;      
-    fprintf(QuadFile,"JNZ T%d,L%d \n",temp,);
+
+    NewScope();
+
+    fprintf(QuadFile,"Case%d: \n",caseNum);
+    caseNum++;
+
+    fprintf(QuadFile,"CMP T%d,%s,%s \n",temp,stack[top-1],stack[top]);     
+    fprintf(QuadFile,"JNZ T%d,Case%d \n",temp,caseNum);
     
     
     temp++; 
-    */
+
+}
+void DefaultCase()
+{
+    NewScope();
+    fprintf(QuadFile,"Case%d: \n",caseNum);
+    caseNum++;
+}
+void CaseEnd()
+{
+    fprintf(QuadFile,"JMP SwitchEnd%d \n",cases[caseTop]);
+
+    EndScope();
+}
+void SwitchEnd()
+{
+    fprintf(QuadFile,"SwitchEnd%d: \n",cases[caseTop]);
+    caseTop--;
+
+    EndScope();
 }
 void IfBegin()
 {
@@ -38,7 +61,6 @@ void LoopBegin()
 {
 
     label[++labelTop] = labelEnd;
-
     labelEnd++;
     fprintf(QuadFile,"L%d: \n",label[labelTop]);
 }
@@ -71,6 +93,11 @@ bool CheckType(char *x,char *y)
     if(strcmp(x,y) != 0)
     {
         fprintf(QuadFile,"Error : type mismatch ! \n");
+        return false;
+    }
+    else if ( strcmp(x,"str") == 0)
+    {
+        fprintf(QuadFile,"Error : Can't perform this operation on strings ! \n");
         return false;
     }
 
@@ -113,7 +140,7 @@ void CheckCondition()
     else 
     {
         fprintf(QuadFile,"JZ %s,end%d \n",stack[top],label[labelTop]);
-        top++;
+        top+=2;
     }
     top-=3;
     temp++; 
@@ -195,3 +222,12 @@ void AssignCode()
     fprintf(QuadFile,"MOV %s,%s \n",stack[top-1],stack[top]);
     top-=2; 
 }
+/*
+
+void ORcondition()
+{
+    label[++labelTop] = labelEnd;
+    labelEnd++;
+    CheckCondition();
+}
+*/
