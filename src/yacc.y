@@ -68,21 +68,21 @@ statement:	type IDENTIFIER SEMICOLON   																		{Declare($2,$1,yylineno
 
 		| Assignment_Statement
 		
-		| TYPE_CONSTANT type IDENTIFIER ASSIGN exp SEMICOLON 										{  if(ConstAssign($3,$2,$5.val,$5.type,yylineno)){ AssignCode();   printf("Constant Assignment\n");}}
+		| TYPE_CONSTANT type V ASSIGN exp SEMICOLON 										{  if(ConstAssign($3.name,$2,$5.val,$5.type,yylineno)){ AssignCode();   }}
 		
 		/*  Loops */
 		| WHILE {NewScope(); LoopBegin();} ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET 	{CheckCondition();} scope {LoopEnd(); EndScope();}
 		
-		| DO 		{NewScope(); LoopBegin();} scope WHILE ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition(); } SEMICOLON					{LoopEnd(); EndScope(); printf("Do while\n");}
+		| DO 		{NewScope(); LoopBegin();} scope WHILE ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition(); } SEMICOLON					{LoopEnd(); EndScope(); }
 
 		| FOR 	{NewScope(); LoopBegin();} ARGUMENT_OBRACKET  Assignment_Statement
 		  conditions SEMICOLON {CheckCondition();}
 		  Assignment_Statement ARGUMENT_CBRACKET
-		  scope	ARGUMENT_OBRACKET		Assignment_Statement ARGUMENT_CBRACKET SEMICOLON					{LoopEnd(); EndScope();}																										  {printf("For loop\n");}
+		  scope	ARGUMENT_OBRACKET		Assignment_Statement ARGUMENT_CBRACKET SEMICOLON					{LoopEnd(); EndScope();}																										
 
 		//Repeat
 
-		| REPEAT {NewScope();LoopBegin();} scope UNTIL ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {RepeatCondition();} SEMICOLON			{ LoopEnd(); EndScope(); printf("repeat-until loop\n");}
+		| REPEAT {NewScope();LoopBegin();} scope UNTIL ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {RepeatCondition();} SEMICOLON			{ LoopEnd(); EndScope(); }
 
 		//=====================================
 		
@@ -90,7 +90,7 @@ statement:	type IDENTIFIER SEMICOLON   																		{Declare($2,$1,yylineno
 
 
 
-		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET   {if(strcmp($3.type,"int") != 0 && strcmp($3.type,"Cint")!= 0){fprintf(ErrorFile,"Error at line %d : Switch accpets integers only !\n",yylineno);}cases[++caseTop] = caseEnd; caseEnd++; printf("Switch case\n");} SwitchBody   		
+		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET   {if(strcmp($3.type,"int") != 0 && strcmp($3.type,"Cint")!= 0){fprintf(ErrorFile,"Error at line %d : Switch accpets integers only !\n",yylineno);}cases[++caseTop] = caseEnd; caseEnd++; } SwitchBody   		
 	
 		| RET SEMICOLON {return  1;}
 		;
@@ -110,7 +110,7 @@ type:	  TYPE_INT 					{strcpy($$,$1);}
 			| TYPE_STRING 			{strcpy($$,$1);}
 			;
 
-Assignment_Statement:		V ASSIGN exp SEMICOLON			{ if(Assign($1.name,$3.val,$3.type,yylineno)){ AssignCode();   printf( "Initilization \n");}}
+Assignment_Statement:		V ASSIGN exp SEMICOLON			{ if(Assign($1.name,$3.val,$3.type,yylineno)){ AssignCode(); }}
 
 
 
@@ -144,7 +144,6 @@ conditions:
 exp:    exp PLUS exp				{ push("ADD"); OpCode();  
 														 operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"PLUS",yylineno);
 														
-															printf("Plus\n");
 														}
 
 		 |  exp MINUS exp				{ push("SUB"); OpCode();    
@@ -202,10 +201,11 @@ value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); strcpy($
 V:  IDENTIFIER				{ 					push($1);
 																	search($1); 
 																	if( current != NULL)
-																	{strcpy($$.name,current->value.name); strcpy($$.val,current->value.val); strcpy($$.type,current->value.type);}
+																	{
+																		strcpy($$.name,current->value.name); strcpy($$.val,current->value.val); strcpy($$.type,current->value.type);}
 																	else 
 																	{
-																		printf("Error undeclared variable ");
+																		strcpy($$.name,$1); strcpy($$.val,"NULL");
 																		
 																	}
 															}	  

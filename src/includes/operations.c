@@ -2,8 +2,6 @@
 
 bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op,int yylineno)
 {
-    printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
-    
     if( strcmp("Cint",xType) == 0)
         strcpy(xType,"int");
     else if( strcmp("Cfloat",xType) == 0)
@@ -26,11 +24,9 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op,
     if( strcmp("int",xType)==0  )
     {
 
-        printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
-        int op1 = atoi(x);
+       int op1 = atoi(x);
         int op2 = atoi(y);
 
-        printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s    ,%d , %d\n",x,y,xType,yType,val,type,op,op1,op2);
         int result;
         if(IntOper(op1,op2,&result,op,yylineno))
         {

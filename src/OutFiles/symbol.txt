@@ -1,3 +1,0 @@
-=========================== Symbol Table 0 ========================
-
-Name =  x , Type = int , Value = NULL

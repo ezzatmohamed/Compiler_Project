@@ -2,9 +2,13 @@
 .vscode/*
 GUI/node_modules/*
 GUI/config/*
+GUI/Results/*
+GUI/uploads/*
 src/OutFiles/*
 
 program.txt
+declareations.txt
+loops.txt
 
 src/y.tab.c
 src/y.tab.h

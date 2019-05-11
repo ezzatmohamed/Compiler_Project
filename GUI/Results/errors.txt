@@ -1,1 +1,3 @@
-Error at line 6 : uninitialized Variable !
+Error at line 25 : type mismatch ! 
+Error at line 27 : type mismatch ! 
+Error at line 29 : can't change a constant ! 

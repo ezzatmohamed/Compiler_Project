@@ -1,3 +1,9 @@
-MOV y,3 
-ADD T0,x,3 
-MOV y,T0 
+MOV i1,3 
+MOV f1,2.1 
+MOV s1,"hey" 
+MOV c1,'d' 
+MOV i3,10 
+MOV f3,11.3 
+MOV s3,"hello" 
+MOV c3,'w' 
+MOV i1,i3 

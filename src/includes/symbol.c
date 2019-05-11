@@ -40,8 +40,7 @@ void displaySymboltable()
         { 
             fprintf(SymbolFile,"%s %s %d ",ptr->value.name,ptr->value.type,i);
 
-           // printf("%d , %d %s %s %s dd1 \n",indexST,i,ptr->value.name,ptr->value.type,ptr->value.val);
-            ptr = ptr->next; 
+           ptr = ptr->next; 
         }
 
         //fprintf(SymbolFile,"");
@@ -53,17 +52,12 @@ void insert(struct node *new_node)
     new_node->next = ST[CurrentST].head; 
     ST[CurrentST].head   = new_node; 
 
-  //  printf("head : %s   %s   %s \n\n",ST[CurrentST].head->value.name,ST[CurrentST].head->value.type,ST[CurrentST].head->value.val);
-  // displaySymboltable();
 } 
 
 
 bool Declare(char *name,char  *var_type,int yylineno)
 {
-
-    // if no variable is declared with this name.
-    // current pointer will be null.
-    search(name);
+   search(name);
 
     if( current != NULL )
     {
@@ -77,7 +71,6 @@ bool Declare(char *name,char  *var_type,int yylineno)
     strcpy(new_node->value.val,"NULL");
     strcpy(new_node->value.type,var_type); 
 
-  //  printf("new_node : %s   %s   %s\n\n",name,name,name);
     insert(new_node);
     return true;
 }
@@ -85,24 +78,37 @@ bool Declare(char *name,char  *var_type,int yylineno)
 
 bool Assign(char *name , char *val,char  *var_type,int yylineno)
 {
-    printf("Search : %s\n",name);
     search(name);
+
+
+    if( strcmp("Cint",var_type) == 0)
+        strcpy(var_type,"int");
+    else if( strcmp("Cfloat",var_type) == 0)
+        strcpy(var_type,"float");
+    else if( strcmp("Cchar",var_type) == 0)
+        strcpy(var_type,"char");
+    else if( strcmp("Cstr",var_type) == 0)
+        strcpy(var_type,"str");
+    
+    
+
     if( current == NULL)    
     {
         fprintf(ErrorFile,"Error at line %d : undeclared variable ! \n",yylineno);
         return false;
+    }
+    else if( strcmp("Cint",current->value.type)==0 || strcmp("Cfloat",current->value.type)==0 || strcmp("Cstr",current->value.type)==0 || strcmp("Cchar",current->value.type)==0 )
+    {
+        fprintf(ErrorFile,"Error at line %d : can't change a constant ! \n",yylineno);
+        return false;
+    
     }
     else if( strcmp(current->value.type,var_type) )
     {
         fprintf(ErrorFile,"Error at line %d : type mismatch ! \n",yylineno);
         return false;
     }
-    else if( strcmp("Cint",var_type)==0 || strcmp("Cfloat",var_type)==0 || strcmp("Cstr",var_type)==0 || strcmp("Cchar",var_type)==0 )
-    {
-        fprintf(ErrorFile,"Error at line %d : can't change a constant ! \n",yylineno);
-        return false;
     
-    }
 
     strcpy(current->value.val,val);
     return true;
@@ -110,7 +116,22 @@ bool Assign(char *name , char *val,char  *var_type,int yylineno)
 bool ConstAssign(char *name,char *const_type,char *val,char * var_type,int yylineno)
 {
     
-    if( Declare(  name , strcat("C",const_type),yylineno) )
+
+    char x[7];
+    if( strcmp("int",var_type) == 0)
+    {
+        strcpy(x,"Cint");
+    }
+    else if( strcmp("float",var_type) == 0)
+    {
+        strcpy(x,"Cfloat");
+    }
+    else if( strcmp("str",x) == 0)
+        strcpy(x,"Cstr");
+    else if( strcmp("char",var_type) == 0)
+        strcpy(x,"Cchar");
+
+    if( Declare(  name , x,yylineno) )
     {
         search(name); 
         strcpy(current->value.val,val);
