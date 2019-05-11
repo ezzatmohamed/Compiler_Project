@@ -2,7 +2,7 @@
 .vscode/*
 GUI/node_modules/*
 GUI/config/*
-
+src/OutFiles/*
 
 
 src/y.tab.c
