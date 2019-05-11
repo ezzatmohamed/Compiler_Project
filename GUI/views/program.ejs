@@ -1,0 +1,22 @@
+<div class="row mt-5">
+
+    <div class="col-md-12 m-auto">
+  <div class="card text-white bg-success mb-3" style="max-width: 50rem;">
+    <div class="card-header">Program</div>
+    <div class="card-body">
+            <% var data1 = data %>
+            <% var i = 0 %>
+            <% var words = data1.split("\n")%>
+             <% for(i = 0; i < words.length; i++) {%>
+                
+               <h4 style = "font-size: 100%;"class="card-title"> <label style = "color: rgb(169, 255, 244);"><%= i+1 %>:  </label>  <%= words[i]%></h4>
+          
+            <% }%>
+            
+      
+    </div>
+  </div>
+  
+</div>
+</div>
+  

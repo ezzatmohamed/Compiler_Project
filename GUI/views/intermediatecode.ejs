@@ -1,14 +1,21 @@
 <div class="row mt-5">
 
-<div class="col-md-12 m-auto">
-<div class="jumbotron">
-        <% var data1 = data %>
-        <% var i = 0 %>
-        <% var words = data1.split("\n")%>
-         <% for(i = 0; i < words.length; i++) {%>
-            <p class="lead"> <%= words[i] %> </p>
-        <% }%>
-   
+  <div class="col-md-12 m-auto">
+<div class="card text-white bg-secondary mb-3" style="max-width: 50rem;">
+  <div class="card-header">Intermediate Code</div>
+  <div class="card-body">
+          <% var data1 = data %>
+          <% var i = 0 %>
+          <% var words = data1.split("\n")%>
+           <% for(i = 0; i < words.length; i++) {%>
+              
+              <h4 style = "font-size: 100%" class="card-title"><%= words[i]%></h4>
+        
+          <% }%>
+          
+    
   </div>
+</div>
+
 </div>
 </div>

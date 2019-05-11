@@ -10,7 +10,12 @@ router.get('/', (req,res)=> res.render('welcome'));
 
 
 
-
+router.get('/program',function(req,res){
+  fs.readFile("uploads/program.txt",function(err,buf){
+    var data = buf.toString();
+    res.render('program',{data});
+  });
+});
 //Running 
 router.get('/errors', function(req,res) {
   fs.readFile("Results/errors.txt", function(err, buf)
