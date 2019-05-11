@@ -44,7 +44,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 14 "yacc.y" /* yacc.c:1921  */
+#line 13 "yacc.y" /* yacc.c:1921  */
 
     
 		struct ExpInfo {
@@ -183,7 +183,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 24 "yacc.y" /* yacc.c:1921  */
+#line 23 "yacc.y" /* yacc.c:1921  */
 
 	char name[20];
 

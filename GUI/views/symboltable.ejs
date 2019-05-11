@@ -1,0 +1,22 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Type</th>
+      <th scope="col">Scope</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% var data1 = symbols %>
+      <% var i = 0 %>
+      <% var words = data1.split(" ")%>
+       <% for(i = 0; i < words.length; i+=3) {%>
+       
+          <tr class="table-info">
+          <th scope="row"> <%= words[i] %></th>
+          <td> <%= words[i+1] %></td>
+          <td> <%= words[i+2] %></td>
+          </tr>
+        <% }%>
+  </tbody>
+</table> 

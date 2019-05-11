@@ -4,7 +4,6 @@
 		#include "operations.c"
 		#include "code.c"
 
-		FILE *SyntaxError;
 		int yylineno;
 		extern char *yytext; 
     int yylex(void);
@@ -91,8 +90,9 @@ statement:	type IDENTIFIER SEMICOLON   																		{if(!Declare($2,$1)){re
 
 
 
-		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET   { if(strcmp($3.type,"int") != 0 || strcmp($3.type,"Cint") != 0 ){fprintf(SyntaxError,"Error at line %d : Switch only accepts integer \n",yylineno); return 1; }cases[++caseTop] = caseEnd; caseEnd++; printf("Switch case\n");} SwitchBody   		
+		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET   { if(strcmp($3.type,"int") != 0 && strcmp($3.type,"Cint") != 0 ){fprintf(SyntaxError,"Error at line %d : Switch only accepts integer \n",yylineno); return 1; }cases[++caseTop] = caseEnd; caseEnd++; printf("Switch case\n");} SwitchBody   		
 	
+		| RET SEMICOLON {return  1;}
 		;
 
 
@@ -249,17 +249,17 @@ int main(void)
 
 		ST[CurrentST].head = NULL;
 		ST[CurrentST].parent = -1;
-		QuadFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/quad.txt","w");
+		QuadFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/Results/quad.txt","w");
 		
-		SymbolFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/symbol.txt","w");
-		SyntaxError = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/syntax.txt","w");
+		SymbolFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/Results/symbol.txt","w");
+		SyntaxError = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/Results/syntax.txt","w");
 
 		extern FILE *yyin;		
-		yyin = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/src/OutFiles/program.txt","r");
+		yyin = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/uploads/program.txt","r");
 
 		
 	  yyparse();
-		
+		displaySymboltable();
 		fclose (QuadFile);
 		fclose (SymbolFile);
 		fclose (SyntaxError);

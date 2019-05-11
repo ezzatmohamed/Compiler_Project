@@ -1,0 +1,25 @@
+<div class="row mt-5">
+    <div class="col-md-7 m-auto">
+      <div class="card card-body text-center">
+        <form action="submit" method="POST">
+            <fieldset>
+              <legend>Compiler</legend>
+              <div class="form-group">
+                <label for="exampleTextarea">Enter test case:</label>
+                <textarea class="form-control" name="testcase" id="exampleTextarea" rows="3"></textarea>
+                <button type = "submit" class="btn btn-primary btn-block">Submit</button>
+              </div>
+              </fieldset>
+          </form>
+          <form class="fileupload" action="upload" method = "post" enctype="multipart/form-data">
+            <label for="exampleInputFile">Or upload a file</label>
+            <input type="file" name = "upfile" value = "" class="form-control-file" id="exampleInputFile"  aria-describedby="fileHelp">
+            <small id="fileHelp" class="form-text text-muted"></small>
+            <button type = "submit" class="btn btn-secondary btn-lrg" text-align:left >Upload</button>
+          </form>
+          
+           
+        
+      </div>
+    </div>
+  </div>

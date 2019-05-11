@@ -1,13 +1,18 @@
+int y;
+y = 3;
 int x;
-x =5;
 
-switch(x)
+x = y +7;
+
+while( x != 5)
 {
-    case(1){ x= 3;}
-    case(2){ x = 4;}
-    default{ x = 7;}
+    int z;
+    y = y + x;
+    x = x - 1;
 }
 
-int z;
-z=2;
 
+x = 1;
+y = 0;
+
+return;

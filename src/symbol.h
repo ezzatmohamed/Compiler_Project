@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
+FILE *SyntaxError;
 FILE *SymbolFile;
 
 //typedef enum{INT,FLOAT,CHAR,STRING,BOOL,CONST} Var_Type;

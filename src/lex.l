@@ -69,8 +69,8 @@ or					return RELATION_OR;
 
 
 
-[0-9]+                                          {strcpy(yylval.name,yytext); return INTEGER_VALUE;}
-[0-9]+\.[0-9]+                                  {strcpy(yylval.name,yytext); return FLOATINPOINT_VALUE;}
+-?[0-9]+                                          {strcpy(yylval.name,yytext); return INTEGER_VALUE;}
+-?[0-9]+\.[0-9]+                                  {strcpy(yylval.name,yytext); return FLOATINPOINT_VALUE;}
 \"[\x23-\x7E =\?!\*()<>+/^%~|&@#;{}.]*\"     	{strcpy(yylval.name,yytext);  return STRING_VALUE;}
 \'[\x23-\x7E =\?!\*()<>+/^%~|&@#;{}.]?\'        {strcpy(yylval.name,yytext);  return CHARACTER;}
 [a-zA-Z][_a-zA-Z0-9]*   						{strcpy(yylval.name,yytext); return IDENTIFIER;} 	

@@ -1,0 +1,14 @@
+<div class="row mt-5">
+
+<div class="col-md-12 m-auto">
+<div class="jumbotron">
+        <% var data1 = data %>
+        <% var i = 0 %>
+        <% var words = data1.split("\n")%>
+         <% for(i = 0; i < words.length; i++) {%>
+            <p class="lead"> <%= words[i] %> </p>
+        <% }%>
+   
+  </div>
+</div>
+</div>
