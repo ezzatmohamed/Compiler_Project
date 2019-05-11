@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-FILE *SyntaxError;
+FILE *ErrorFile;
 FILE *SymbolFile;
 
 //typedef enum{INT,FLOAT,CHAR,STRING,BOOL,CONST} Var_Type;
@@ -48,8 +48,8 @@ struct node *current = NULL;
 
 void search(char *x);
 void insert(struct node *new_node) ;
-bool Declare(char *name,char  *var_type);
-bool Assign(char *name , char *val,char* var_type);
+bool Declare(char *name,char  *var_type,int yylineno);
+bool Assign(char *name , char *val,char* var_type,int yylineno);
 
 void NewScope(); // Create New Symbol-Table
 void EndScope();

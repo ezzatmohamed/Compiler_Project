@@ -1,6 +1,6 @@
 #include "operations.h"
 
-bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
+bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op,int yylineno)
 {
     printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s\n",x,y,xType,yType,val,type,op);
     
@@ -17,7 +17,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 
     if(strcmp(xType,yType) != 0)
     {
-        printf("Error : type mismatch ! \n");
+        fprintf(ErrorFile,"Error at line %d : type mismatch ! \n",yylineno);
         return false;
     }
 
@@ -32,7 +32,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 
         printf("Operator : %s ,%s ,%s ,%s , %s ,%s , %s    ,%d , %d\n",x,y,xType,yType,val,type,op,op1,op2);
         int result;
-        if(IntOper(op1,op2,&result,op))
+        if(IntOper(op1,op2,&result,op,yylineno))
         {
 
             strcpy(type,"int");
@@ -40,7 +40,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 
             return true;
         }
-        printf("Error: none int .\n");
+        fprintf(ErrorFile,"Error at line %d : none int .\n",yylineno);
         return false;
     }
     else if ( strcmp("float",xType) == 0)
@@ -48,7 +48,7 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
         float op1 = atof(x);
         float op2 = atof(y);
         float result;
-        if(FloatOper(op1,op2,&result,op))
+        if(FloatOper(op1,op2,&result,op,yylineno))
         {
             strcpy(type,"float");
             snprintf(val, sizeof val, "%f", result);
@@ -56,11 +56,11 @@ bool operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
         }
         return false;
     }
-    printf("Error: Can't perform this operation. \n");
+    fprintf(ErrorFile,"Error at line %d : Can't perform this operation. \n",yylineno);
     return false;
 
 }
-bool IntOper(int x, int y,int *result, char *op)
+bool IntOper(int x, int y,int *result, char *op,int yylineno)
 {
 
     if( strcmp("PLUS",op)  == 0 )
@@ -81,14 +81,14 @@ bool IntOper(int x, int y,int *result, char *op)
         *result = !x;
     else
     {
-        printf("Error : can't perform this operation on int. \n");
+        fprintf(ErrorFile,"Error at line %d : can't perform this operation on int. \n",yylineno);
         return false;
     }
 
     return true;
 }
 
-bool FloatOper(float x, float y,float *result, char *op)
+bool FloatOper(float x, float y,float *result, char *op,int yylineno)
 {
     
     if( strcmp("PLUS",op)  == 0 )
@@ -101,71 +101,9 @@ bool FloatOper(float x, float y,float *result, char *op)
         *result = x/y;
     else
     {
-        printf("Error : can't perform this operation on float. \n");
+        fprintf(ErrorFile,"Error at line %d : can't perform this operation on float. \n",yylineno);
         return false ;
     }
     
     return true;
 }
-/*
-struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op)
-{
-    struct ExpInfo res;
-    strcpy(res.type,"NULL");
-    strcpy(res.val,"NULL");
-    
-    
-    char result;
-    
-    if(strcmp(x.type,y.type) != 0)
-    {
-        printf("Error : type mismatch ! \n");
-        return res;
-    }
-    
-    else if( strcmp(op,"==") == 0 )
-    {
-        sprintf(res.val, "%d", !strcmp(x.val,y.val));
-    }
-    else if( strcmp(op,"!=") == 0 )
-    {
-        sprintf(res.val, "%d", strcmp(x.val,y.val));
-    }
-    else
-    {
-        if()
-        {}
-        else if(){}
-        else if(){}
-    }
-    
-    if( strcmp(op,"and") == 0)
-    {
-        
-    }
-    else if( strcmp(op,"or") == 0 )
-    {
-
-    }
-    
-    else if( strcmp(op,"<") == 0)
-    {
-
-    }
-    else if( strcmp(op,">") == 0 )
-    {
-
-    }
-    else if( strcmp(op,"<=") == 0 )
-    {
-
-    }
-    else if( strcmp(op,">=") == 0 )
-    {
-
-    }
-    
-    strcpy(res.val,"int");
-    return res;
-
-}*/

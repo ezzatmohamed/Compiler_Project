@@ -58,7 +58,7 @@ void insert(struct node *new_node)
 } 
 
 
-bool Declare(char *name,char  *var_type)
+bool Declare(char *name,char  *var_type,int yylineno)
 {
 
     // if no variable is declared with this name.
@@ -67,7 +67,7 @@ bool Declare(char *name,char  *var_type)
 
     if( current != NULL )
     {
-        fprintf(SyntaxError,"Error : Already Declared Variable ! \n");
+        fprintf(ErrorFile,"Error at line %d : Already Declared Variable ! \n",yylineno);
         return false;
     }
     
@@ -83,23 +83,23 @@ bool Declare(char *name,char  *var_type)
 }
 
 
-bool Assign(char *name , char *val,char  *var_type)
+bool Assign(char *name , char *val,char  *var_type,int yylineno)
 {
     printf("Search : %s\n",name);
     search(name);
     if( current == NULL)    
     {
-        fprintf(SyntaxError,"Error : undeclared variable ! \n\n");
+        fprintf(ErrorFile,"Error at line %d : undeclared variable ! \n",yylineno);
         return false;
     }
     else if( strcmp(current->value.type,var_type) )
     {
-        fprintf(SyntaxError,"Error : type mismatch ! \n");
+        fprintf(ErrorFile,"Error at line %d : type mismatch ! \n",yylineno);
         return false;
     }
     else if( strcmp("Cint",var_type)==0 || strcmp("Cfloat",var_type)==0 || strcmp("Cstr",var_type)==0 || strcmp("Cchar",var_type)==0 )
     {
-        fprintf(SyntaxError,"Error : can't change a constant ! \n");
+        fprintf(ErrorFile,"Error at line %d : can't change a constant ! \n",yylineno);
         return false;
     
     }
@@ -107,10 +107,10 @@ bool Assign(char *name , char *val,char  *var_type)
     strcpy(current->value.val,val);
     return true;
 }
-bool ConstAssign(char *name,char *const_type,char *val,char * var_type)
+bool ConstAssign(char *name,char *const_type,char *val,char * var_type,int yylineno)
 {
     
-    if( Declare(  name , strcat("C",const_type)  ) )
+    if( Declare(  name , strcat("C",const_type),yylineno) )
     {
         search(name); 
         strcpy(current->value.val,val);

@@ -71,7 +71,7 @@ void LoopEnd()
     fprintf(QuadFile,"end%d: \n",label[labelTop]);
     labelTop--;
 }
-bool CheckType(char *x,char *y)
+bool CheckType(char *x,char *y,int yylineno)
 {
     if( strcmp("Cint",x) == 0)
         strcpy(x,"int");
@@ -92,12 +92,12 @@ bool CheckType(char *x,char *y)
 
     if(strcmp(x,y) != 0)
     {
-        fprintf(QuadFile,"Error : type mismatch ! \n");
+        fprintf(ErrorFile,"Error at line %d : type mismatch ! \n",yylineno);
         return false;
     }
     else if ( strcmp(x,"str") == 0)
     {
-        fprintf(QuadFile,"Error : Can't perform this operation on strings ! \n");
+        fprintf(ErrorFile,"Error at line %d : Can't perform this operation on strings ! \n",yylineno);
         return false;
     }
 
@@ -222,12 +222,3 @@ void AssignCode()
     fprintf(QuadFile,"MOV %s,%s \n",stack[top-1],stack[top]);
     top-=2; 
 }
-/*
-
-void ORcondition()
-{
-    label[++labelTop] = labelEnd;
-    labelEnd++;
-    CheckCondition();
-}
-*/

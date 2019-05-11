@@ -64,14 +64,14 @@ program:
 				| statement
         ;
 
-statement:	type IDENTIFIER SEMICOLON   																		{if(!Declare($2,$1)){return 1;};    }
+statement:	type IDENTIFIER SEMICOLON   																		{Declare($2,$1,yylineno);    }
 
 		| Assignment_Statement
 		
-		| TYPE_CONSTANT type V ASSIGN exp SEMICOLON 										{  if(!ConstAssign($3.name,$2,$5.val,$5.type)){return 1;}; AssignCode();   printf("Constant Assignment\n");}
+		| TYPE_CONSTANT type IDENTIFIER ASSIGN exp SEMICOLON 										{  if(ConstAssign($3,$2,$5.val,$5.type,yylineno)){ AssignCode();   printf("Constant Assignment\n");}}
 		
 		/*  Loops */
-		| WHILE {printf("asdsd\n");NewScope(); LoopBegin();} ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET 	{CheckCondition();} scope {LoopEnd(); EndScope();}
+		| WHILE {NewScope(); LoopBegin();} ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET 	{CheckCondition();} scope {LoopEnd(); EndScope();}
 		
 		| DO 		{NewScope(); LoopBegin();} scope WHILE ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET {CheckCondition(); } SEMICOLON					{LoopEnd(); EndScope(); printf("Do while\n");}
 
@@ -90,7 +90,7 @@ statement:	type IDENTIFIER SEMICOLON   																		{if(!Declare($2,$1)){re
 
 
 
-		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET   { if(strcmp($3.type,"int") != 0 && strcmp($3.type,"Cint") != 0 ){fprintf(SyntaxError,"Error at line %d : Switch only accepts integer \n",yylineno); return 1; }cases[++caseTop] = caseEnd; caseEnd++; printf("Switch case\n");} SwitchBody   		
+		| SWITCH ARGUMENT_OBRACKET V ARGUMENT_CBRACKET   {if(strcmp($3.type,"int") != 0 && strcmp($3.type,"Cint")!= 0){fprintf(ErrorFile,"Error at line %d : Switch accpets integers only !\n",yylineno);}cases[++caseTop] = caseEnd; caseEnd++; printf("Switch case\n");} SwitchBody   		
 	
 		| RET SEMICOLON {return  1;}
 		;
@@ -110,28 +110,28 @@ type:	  TYPE_INT 					{strcpy($$,$1);}
 			| TYPE_STRING 			{strcpy($$,$1);}
 			;
 
-Assignment_Statement:		V ASSIGN exp SEMICOLON			{ if(!Assign($1.name,$3.val,$3.type)){return 1;} AssignCode();   printf( "Initilization \n");}
+Assignment_Statement:		V ASSIGN exp SEMICOLON			{ if(Assign($1.name,$3.val,$3.type,yylineno)){ AssignCode();   printf( "Initilization \n");}}
 
 
 
 If_statment : ARGUMENT_OBRACKET conditions ARGUMENT_CBRACKET { CheckCondition();} If_else
 						;
 						
-If_else : scope %prec IFX 								 { IfEnd(); EndScope(); printf("If statement\n"); }
-						|	scope ELSE {Else();} scope	 {IfEnd();  EndScope(); printf("If-Elsestatement\n");}
+If_else : scope %prec IFX 								 { IfEnd();  EndScope();  }
+						|	scope ELSE {Else();} scope	 { IfEnd();  EndScope();  }
 						;
 conditions:
-	 		exp  RELATION_LESS_THAN exp{ if(!CheckType($1.type,$3.type)){return 1;} push("<");}
+	 		exp  RELATION_LESS_THAN exp{ if(CheckType($1.type,$3.type,yylineno)){  push("<");}}
 
-    | exp  RELATION_LESS_EQUAL exp {if(!CheckType($1.type,$3.type)){return 1;}push("<=");}
+    | exp  RELATION_LESS_EQUAL exp {if(CheckType($1.type,$3.type,yylineno)){push("<=");}}
 
-    | exp  RELATION_GREATER_EQUAL exp  {if(!CheckType($1.type,$3.type)){return 1;} push(">=");}
+    | exp  RELATION_GREATER_EQUAL exp  {if(CheckType($1.type,$3.type,yylineno)){push(">=");}}
 
-    | exp  RELATION_GREATER_THAN exp  {if(!CheckType($1.type,$3.type)){return 1;} push(">");}
+    | exp  RELATION_GREATER_THAN exp  {if(CheckType($1.type,$3.type,yylineno)){ push(">");}}
 
-    | exp  RELATION_NOTEQUAL exp {if(!CheckType($1.type,$3.type)){return 1;} push("!=");}
+    | exp  RELATION_NOTEQUAL exp {if(CheckType($1.type,$3.type,yylineno)){ push("!=");}}
 
-    | exp  RELATION_EQUALS exp  	{if(!CheckType($1.type,$3.type)){return 1;} push("==");} 
+    | exp  RELATION_EQUALS exp  	{if(CheckType($1.type,$3.type,yylineno)){push("==");}}
 
 		//| conditions RELATION_AND  conditions { CheckCondition(); }
 
@@ -142,67 +142,38 @@ conditions:
     ;
 														//(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op)
 exp:    exp PLUS exp				{ push("ADD"); OpCode();  
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"PLUS") )
-															{
-																return 1;
-															}
+														 operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"PLUS",yylineno);
+														
 															printf("Plus\n");
 														}
 
 		 |  exp MINUS exp				{ push("SUB"); OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MINUS") )
-															{
-																return 1;
-															}
-															;printf("minus\n");
+														 !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MINUS",yylineno);
+															
 														}
 
 		 |  exp MULTIPLY exp		{ push("MUL"); OpCode();   
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MULTIPLY") )
-															{
-																return 1;
-															}
-															printf("mult\n");
+														operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MULTIPLY",yylineno);
 														}
 
 		 |  exp DIVIDE exp			{ push("DIV"); OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"DIVIDE") )
-															{
-																return 1;
-															}
-															printf("divide\n");
+															operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"DIVIDE",yylineno);
 														}
 
 		 |  exp MODULUS exp			{ push("MOD"); OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MODULUS") )
-															{
-																return 1;
-															}
-															printf("modulus\n");
+															operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"MODULUS",yylineno);
 														}
 
 		 |  exp AND exp					{ push("AND"); OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"AND") )
-															{
-																return 1;
-															}
-															printf("bitwise and\n");
+															operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"AND",yylineno);
 														}
 
 		 |  exp OR exp					{ push("OR") ; OpCode();    
-															if( !operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"OR") )
-															{
-																return 1;
-															}
-															printf("bitwise or\n");
+															operation($1.val,$3.val,$1.type,$3.type,$$.val,$$.type,"OR",yylineno);
 														}
 
 		 |  NOT exp							{ push("NOT"); OpCode();    
-															if( !operation($2.val,$2.val,$2.type,$2.type,$$.val,$$.type,"NOT") )
-															{
-																return 1;
-															}
-															printf("bitwise not\n");
+															operation($2.val,$2.val,$2.type,$2.type,$$.val,$$.type,"NOT",yylineno);
 														}
 														
 		 | 	ARGUMENT_OBRACKET exp ARGUMENT_CBRACKET 			{$$=$2;}
@@ -214,7 +185,19 @@ value:      INTEGER_VALUE   									{ push($1); strcpy($$.type,"int"); strcpy($
 					| FLOATINPOINT_VALUE   							{	push($1); strcpy($$.type,"float"); strcpy($$.val,$1); }	
 					| STRING_VALUE  									  {	push($1); strcpy($$.type,"str"); strcpy($$.val,$1); }
 					| CHARACTER  											  { push($1); strcpy($$.type,"char"); strcpy($$.val,$1);}						
-					| V																	{ $$=$1;}
+					| V																	{ $$=$1;
+
+																									search($1.name);
+																									if( current == NULL)
+																									{
+																										fprintf(ErrorFile,"Error at line %d : undeclared Variable !\n",yylineno);
+																									}
+																									else if(strcmp(current->value.val,"NULL") == 0)	
+																									{
+																										fprintf(ErrorFile,"Error at line %d : uninitialized Variable !\n",yylineno);
+																									}
+
+																							}
 					;
 V:  IDENTIFIER				{ 					push($1);
 																	search($1); 
@@ -223,7 +206,7 @@ V:  IDENTIFIER				{ 					push($1);
 																	else 
 																	{
 																		printf("Error undeclared variable ");
-																		return 1;
+																		
 																	}
 															}	  
 
@@ -240,7 +223,7 @@ scope:	SCOPE_OBRACE SCOPE_CBRACE
 %%
 
 void yyerror(char *s) {
-    fprintf(SyntaxError,"%s at line %d : %s \n",s,yylineno,yytext);
+    fprintf(ErrorFile,"%s at line %d : %s \n",s,yylineno,yytext);
 }
 
 int main(void) 
@@ -252,7 +235,7 @@ int main(void)
 		QuadFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/Results/quad.txt","w");
 		
 		SymbolFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/Results/symbol.txt","w");
-		SyntaxError = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/Results/syntax.txt","w");
+		ErrorFile = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/Results/errors.txt","w");
 
 		extern FILE *yyin;		
 		yyin = fopen ("/root/Desktop/CCE/Semester-2/Compilers/Compilers_Project/GUI/uploads/program.txt","r");
@@ -262,7 +245,7 @@ int main(void)
 		displaySymboltable();
 		fclose (QuadFile);
 		fclose (SymbolFile);
-		fclose (SyntaxError);
+		fclose (ErrorFile);
 		fclose (yyin);
 
 

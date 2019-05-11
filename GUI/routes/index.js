@@ -88,9 +88,21 @@ router.post('/upload' ,(req,res)=> {
       //res.send("File Uploaded");*/
 });
 
-router.post('/submit', (req,res)=> {
+router.post('/submit', function(req,res) 
+{
   var data = req.body.testcase;
-  fs.writeFile(__dirname + "/../uploads/program.txt", data, function(err){
+  fs.writeFileSync(__dirname + "/../uploads/program.txt", data);
+  //run command for yacc  # ./output > qd
+  exec('./../src/output', function(err, stdout, stderr)
+  {
+    console.log(stdout);
+    process.stdout.write();
+      
+    });
+    
+    res.render('welcome');
+    /*
+  fs.writeFile  (__dirname + "/../uploads/program.txt", data, function(err){
     if(err)
     {
       console.log("File Upload Failed",name,err);
@@ -107,7 +119,7 @@ router.post('/submit', (req,res)=> {
       //res.send('Done! Uploading files') 
       res.render('welcome');
     }
-  });
+  });*/
 });
 
 

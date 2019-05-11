@@ -10,9 +10,9 @@
 // float to string :  snprintf(str, sizeof str, "%f", myFloat);
 // int to string   :  sprintf(str, "%d", i);
 
-bool  operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op);
-bool  IntOper(int x, int y,int *result, char *op);
-bool  FloatOper(float x, float y,float *result, char *op);
+bool  operation(char*x,char*y,char*xType,char*yType,char* val,char*type,char *op,int yylineno);
+bool  IntOper(int x, int y,int *result, char *op,int yylineno);
+bool  FloatOper(float x, float y,float *result, char *op,int yylineno);
 
 //struct ExpInfo boolOperation(struct ExpInfo x, struct ExpInfo y,char *op);
 

@@ -1,18 +1,30 @@
-int y;
-y = 3;
 int x;
 
-x = y +7;
+int y;
+y =3;
+x = 2;
 
-while( x != 5)
+do
 {
-    int z;
-    y = y + x;
-    x = x - 1;
+    y= y + x;
+    x = x + 1;
+}while(x < 7);
+
+x = y * 3;
+
+if( x < y)
+{
+    x = 10;
+
+    if( x == y )
+    {
+        y = 20;
+    }
+    else
+    {
+        y=50;
+    }
+    x = x + 4;
 }
 
-
-x = 1;
-y = 0;
-
-return;
+y = x;

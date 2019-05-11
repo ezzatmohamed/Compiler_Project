@@ -40,6 +40,6 @@ void displaySymboltable();
 void AssignCode();
 void OpCode();
 void displayStack();
-bool CheckType(char *x,char *y);
+bool CheckType(char *x,char *y,int yylineno);
 
 void ORcondition();
