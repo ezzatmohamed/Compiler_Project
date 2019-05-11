@@ -12,15 +12,26 @@ router.get('/', (req,res)=> res.render('welcome'));
 
 
 //Running 
-router.get('/about', function(req,res, next){
-  exec('mkdir Nanoos', function(err, stdout, stderr){
-    console.log(stdout);
-    process.stdout.write();
-    
-  })
-  
-});
+router.get('/errors', function(req,res) {
+  fs.readFile("Results/errors.txt", function(err, buf)
+  {
+    var data = buf.toString();
 
+    res.render('errors',{data})
+
+  });
+
+});
+/*<% var data1 = data %>
+            <% var i = 0 %>
+            <% var words = data1.split("\n")%>
+            <% for(i = 0; i < words.length; i++) {%>
+                <% var words2 = words.split(" ")%>
+                <% for(j = 0; j < words2.length; j+=2 {%>
+                <h4 class="card-title"><%= words2[j]+' '+ words2[j+1] %></h4>
+                <p class="card-text"></p>
+            <% }%>
+            <% }%>*/ 
 
 router.get('/code', function(req,res)
 {
