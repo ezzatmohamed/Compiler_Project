@@ -4,6 +4,7 @@ GUI/node_modules/*
 GUI/config/*
 src/OutFiles/*
 
+program.txt
 
 src/y.tab.c
 src/y.tab.h

@@ -1,8 +1,8 @@
 %{  
     #include <stdio.h>
-		#include "symbol.c"
-		#include "operations.c"
-		#include "code.c"
+		#include "includes/symbol.c"
+		#include "includes/operations.c"
+		#include "includes/code.c"
 
 		int yylineno;
 		extern char *yytext; 

@@ -1,3 +1,7 @@
+#ifndef SYMBOL_H
+#define SYMBOL_H
+
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -53,3 +57,6 @@ bool Assign(char *name , char *val,char* var_type,int yylineno);
 bool CheckType(char *x,char *y,int yylineno);
 void NewScope(); // Create New Symbol-Table
 void EndScope();
+
+
+#endif
