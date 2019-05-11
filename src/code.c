@@ -71,38 +71,7 @@ void LoopEnd()
     fprintf(QuadFile,"end%d: \n",label[labelTop]);
     labelTop--;
 }
-bool CheckType(char *x,char *y,int yylineno)
-{
-    if( strcmp("Cint",x) == 0)
-        strcpy(x,"int");
-    else if( strcmp("Cfloat",x) == 0)
-        strcpy(x,"float");
-    else if( strcmp("Cstr",x) == 0)
-        strcpy(x,"str");
-    
-    if( strcmp("Cint",y) == 0)
-        strcpy(y,"int");
-    else if( strcmp("Cfloat",y) == 0)
-        strcpy(y,"float");
-    else if( strcmp("Cstr",y) == 0)
-        strcpy(y,"str");
-    
 
-
-
-    if(strcmp(x,y) != 0)
-    {
-        fprintf(ErrorFile,"Error at line %d : type mismatch ! \n",yylineno);
-        return false;
-    }
-    else if ( strcmp(x,"str") == 0)
-    {
-        fprintf(ErrorFile,"Error at line %d : Can't perform this operation on strings ! \n",yylineno);
-        return false;
-    }
-
-    return true;
-}
 void CheckCondition()
 {
     

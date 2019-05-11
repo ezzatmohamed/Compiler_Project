@@ -133,7 +133,7 @@ conditions:
 
     | exp  RELATION_EQUALS exp  	{if(CheckType($1.type,$3.type,yylineno)){push("==");}}
 
-		//| conditions RELATION_AND  conditions { CheckCondition(); }
+		| conditions RELATION_AND  conditions { CheckCondition(); }
 
 		//| conditions RELATION_OR   conditions		{ ORcondition(); }
 

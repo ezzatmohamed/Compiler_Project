@@ -28,3 +28,12 @@ if( x < y)
 }
 
 y = x;
+int z;
+
+if( x and y)
+{
+    z = 20;
+}
+z = 30;
+
+return;

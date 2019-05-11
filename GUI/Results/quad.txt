@@ -25,3 +25,8 @@ ADD T6,x,4
 MOV x,T6 
 end1: 
 MOV y,x 
+JZ y,end4 
+JZ x,end4 
+MOV z,20 
+end4: 
+MOV z,30 

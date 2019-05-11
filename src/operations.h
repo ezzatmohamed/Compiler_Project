@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include "symbol.h"
 
 // atof() chars to float
 // atoi() chars to int

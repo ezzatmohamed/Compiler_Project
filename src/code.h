@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include "symbol.h"
 FILE *QuadFile;
 //int LineCounter = 1;
 
@@ -24,6 +24,11 @@ char stack[100][20];
 int top=-1;
 int temp = 0;
 
+void CaseBegin();
+void DefaultCase();
+void CaseEnd();
+void SwitchEnd();
+
 void IfBegin();
 void IfEnd();
 void Else();
@@ -40,6 +45,3 @@ void displaySymboltable();
 void AssignCode();
 void OpCode();
 void displayStack();
-bool CheckType(char *x,char *y,int yylineno);
-
-void ORcondition();

@@ -1,1 +1,1 @@
-y int 0 x int 0 x int 1 y int 1 y int 2 x int 2 y int 3 x int 3 
+y int 0 x int 0 x int 1 y int 1 z int 2 y int 2 x int 2 y int 3 x int 3 z int 4 y int 4 x int 4 

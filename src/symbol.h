@@ -50,6 +50,6 @@ void search(char *x);
 void insert(struct node *new_node) ;
 bool Declare(char *name,char  *var_type,int yylineno);
 bool Assign(char *name , char *val,char* var_type,int yylineno);
-
+bool CheckType(char *x,char *y,int yylineno);
 void NewScope(); // Create New Symbol-Table
 void EndScope();
