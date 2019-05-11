@@ -1,34 +1,3 @@
 MOV y,3 
-MOV x,2 
-ADD T0,x,1.3 
+ADD T0,x,3 
 MOV y,T0 
-L0: 
-ADD T1,y,x 
-MOV y,T1 
-ADD T2,x,1 
-MOV x,T2 
-CMP T3,x,7 
-JPosZ T3,end0 
-JMP L0 
-end0: 
-MUL T4,y,3 
-MOV x,T4 
-CMP T5,x,y 
-JPosZ T5,end1 
-MOV x,10 
-CMP T6,x,y 
-JNZ T6,end2 
-MOV y,20 
-JMP end3
-end2: 
-MOV y,50 
-end3: 
-ADD T7,x,4 
-MOV x,T7 
-end1: 
-MOV y,x 
-JZ y,end4 
-JZ x,end4 
-MOV z,20 
-end4: 
-MOV z,30 

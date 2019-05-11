@@ -1,44 +1,8 @@
 int x;
-
 int y;
+
 y =3;
-x = 2;
 
-float y;
-float x;
-
-y = x + 1.3;
-
-do
-{
-    y= y + x;
-    x = x + 1;
-}while(x < 7);
-
-x = y * 3;
-
-if( x < y)
-{
-    x = 10;
-
-    if( x == y )
-    {
-        y = 20;
-    }
-    else
-    {
-        y=50;
-    }
-    x = x + 4;
-}
-
-y = x;
-int z;
-
-if( x and y)
-{
-    z = 20;
-}
-z = 30;
+y = x + 3;
 
 return;
