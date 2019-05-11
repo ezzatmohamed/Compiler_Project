@@ -1,32 +1,31 @@
-int i1;
-int i2;
+int x ;
+int y;
+int z;
+x= 10;
+y = 3;
+z = 4;
 
 
-float f1;
-float f2;
+while( x < 20)
+{
+    y = y +x;
+    x = x +1;
+}
 
-str s1;
-str s2;
+int i;
 
-char c1;
-char c2;
+for( i = 0; i < 10;)
+{
+    z = z + i;
+}( i = i +2; );
 
-i1 = 3;
-f1 = 2.1;
-s1 = "hey";
-c1 = 'd';
+do{
+    x = x + z;
+}while( z < 17);
 
-const int i3 = 10;
-const float f3 = 11.3;
-const str s3 = "hello";
-const char c3 = 'w';
-
-i1 = i3;
-i2 = f1;
-
-s1 = c1;
-
-i3 = 3;
-
+repeat
+{
+    x = x +3;
+}until( x == 20);
 
 return;

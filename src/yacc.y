@@ -77,7 +77,7 @@ statement:	type IDENTIFIER SEMICOLON   																		{Declare($2,$1,yylineno
 
 		| FOR 	{NewScope(); LoopBegin();} ARGUMENT_OBRACKET  Assignment_Statement
 		  conditions SEMICOLON {CheckCondition();}
-		  Assignment_Statement ARGUMENT_CBRACKET
+		  ARGUMENT_CBRACKET
 		  scope	ARGUMENT_OBRACKET		Assignment_Statement ARGUMENT_CBRACKET SEMICOLON					{LoopEnd(); EndScope();}																										
 
 		//Repeat
